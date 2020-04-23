@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo 144 > /sys/class/backlight/panel/brightness

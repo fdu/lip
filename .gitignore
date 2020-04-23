@@ -1,0 +1,4 @@
+output
+work
+ramfs_overlay/lib/firmware
+ramfs_overlay/etc/wpa_supplicant.conf

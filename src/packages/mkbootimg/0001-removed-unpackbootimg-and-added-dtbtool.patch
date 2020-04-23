@@ -1,0 +1,49 @@
+From 576e6721093097b5ee80bf032fe8ac7feb0686ff Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Thu, 23 Apr 2020 17:30:22 +0200
+Subject: [PATCH] removed unpackbootimg and added dtbtool
+
+---
+ Makefile | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index aed6b57f..ffe65f07 100755
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@ else
+     LDFLAGS += -Wl,--gc-sections -s
+ endif
+ 
+-all:mkbootimg$(EXE) unpackbootimg$(EXE)
++all:mkbootimg$(EXE) dtbtool$(EXE)
+ 
+ static:
+ 	$(MAKE) LDFLAGS="$(LDFLAGS) -static"
+@@ -36,16 +36,15 @@ mkbootimg$(EXE):mkbootimg.o libmincrypt.a
+ 	$(CROSS_COMPILE)$(CC) -o $@ $^ -L. -lmincrypt $(LDFLAGS)
+ 
+ mkbootimg.o:mkbootimg.c
+-	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< -I. -Werror
++	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< -I.
+ 
+-unpackbootimg$(EXE):unpackbootimg.o
++dtbtool$(EXE):dtbtool.o
+ 	$(CROSS_COMPILE)$(CC) -o $@ $^ $(LDFLAGS)
+ 
+-unpackbootimg.o:unpackbootimg.c
+-	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< -Werror
++dtbtool.o:dtbtool.c
++	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< -I.
+ 
+ clean:
+-	$(RM) mkbootimg unpackbootimg
++	$(RM) mkbootimg unpackbootimg dtbtool
+ 	$(RM) *.a *.~ *.exe *.o
+-	$(MAKE) -C libmincrypt clean
+-
++	$(MAKE) -C libmincrypt clean
+\ No newline at end of file
+-- 
+2.26.2
+

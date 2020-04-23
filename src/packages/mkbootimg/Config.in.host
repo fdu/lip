@@ -1,0 +1,4 @@
+config BR2_PACKAGE_HOST_MKBOOTIMG
+  bool "host mkbootimg"
+  help
+    It is mkbootimg.
