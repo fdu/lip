@@ -101,10 +101,28 @@ RAM disk shell with Buildroot
 
 Here the recovery image boots the device but the root file system is located on the SD card, which gives much more flexibility.
 
-### Build
+#### Build
 
 ```
 $ make recovery_sdcard
 ```
 
 The recovery image to flash is created under *output/sdcard/recovery.img.tar*.
+
+#### Flash
+
+On the smartphone used as reference, this file can be flashed with Odin (tested with 3.12.3). In AP, select the *output/sdcard/recovery.img.tar* file then click *Start*.
+
+#### Create Debian SD card
+
+[Debootstrap](https://wiki.debian.org/Debootstrap) makes it super easy to populate a root file system for an architecture supported by [Debian](https://www.debian.org/).
+
+```
+$ qemu-debootstrap \
+  --foreign \
+  --arch=armhf \
+  --include=net-tools,openssh-server,wpasupplicant \
+  jessie \
+  /path/to/mounted/sdcard \
+  http://ftp.debian.org/debian
+```
