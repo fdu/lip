@@ -89,7 +89,13 @@ Alternatively, *src/overlay/ramfs/etc/network/interfaces* can be edited so that 
 
 ### Screenshots
 
+RAM disk boot menu
 
+![](doc/ramdisk_bootmenu.png)
+
+RAM disk shell with Buildroot
+
+![](doc/ramdisk_shell.png)
 
 ### Recovery image with file system on SD card
 
