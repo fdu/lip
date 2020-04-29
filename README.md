@@ -97,11 +97,11 @@ RAM disk shell with Buildroot
 
 ![](doc/ramdisk_shell.png)
 
-### Recovery image with file system on SD card
+## Recovery image with file system on SD card
 
 Here the recovery image boots the device but the root file system is located on the SD card, which gives much more flexibility.
 
-#### Build
+### Build
 
 ```
 $ make recovery_sdcard
@@ -109,11 +109,11 @@ $ make recovery_sdcard
 
 The recovery image to flash is created under *output/sdcard/recovery.img.tar*.
 
-#### Flash
+### Flash
 
 On the smartphone used as reference, this file can be flashed with Odin (tested with 3.12.3). In AP, select the *output/sdcard/recovery.img.tar* file then click *Start*.
 
-#### Create Debian SD card
+### Create Debian SD card
 
 [Debootstrap](https://wiki.debian.org/Debootstrap) makes it super easy to populate a root file system for an architecture supported by [Debian](https://www.debian.org/).
 
@@ -126,3 +126,87 @@ $ qemu-debootstrap \
   /path/to/mounted/sdcard \
   http://ftp.debian.org/debian
 ```
+
+### Screenshots
+
+Xfce4 desktop
+
+![](doc/screenshot_xfce4_desktop.png)
+
+Multitask
+
+![](doc/screenshot_xfce4_multitask.png)
+
+VLC
+
+![](doc/screenshot_xfce4_vlc.png)
+
+htop
+
+![](doc/screenshot_xfce4_htop.png)
+
+SuperTuxKart
+
+![](doc/screenshot_xfce4_supertuxkart.png)
+
+LibreOffice Writer
+
+![](doc/screenshot_xfce4_writer.png)
+
+LibreOffice Calc
+
+![](doc/screenshot_xfce4_calc.png)
+
+# External references
+
+## TWRP
+
+To build TWRP for the smartphone used as reference, the following Docker container can be used:
+
+```
+FROM debian:9
+RUN apt update
+RUN apt install -y git make schedtool python3 imagemagick curl openjdk-8-jdk unzip nano python bc bison flex zip git make schedtool python3 imagemagick curl openjdk-8-jdk libc6-dev-i386 build-essential g++-multilib
+RUN git config --global user.name "Your Name"
+RUN git config --global user.email "you@example.com"
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo
+RUN sed -i "s/\#\!\/usr\/bin\/env\spython/\#\!\/usr\/bin\/python3/" /usr/bin/repo
+RUN sed -i "s/MIN_PYTHON_VERSION\s=\s(3,\s6)/MIN_PYTHON_VERSION = (3, 5)/" /usr/bin/repo
+RUN chmod +x /usr/bin/repo
+```
+
+From within the container:
+
+```
+$ repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-5.1
+```
+
+In *.repo/manifest.xml* add:
+
+```
+<project path="device/samsung/grandprimevelte" name="TeamWin/android_device_samsung_grandprimevelte" remote="github" revision="android-5.1" />
+```
+
+Then run:
+
+```
+$ repo sync
+$ . build/envsetup.sh
+```
+
+Comment *device/common/gps/gps_us_supl.mk* in *device/samsung/grandprimevelte/device.mk*.
+
+Comment *$(error stopping)* in *bootable/recovery/minuitwrp/Android.mk* after *TW_BOARD_CUSTOM_GRAPHICS support has been deprecated in TWRP*
+
+Finally build with:
+
+```
+$ lunch omni_grandprimevelte-eng
+$ mka recoveryimage ALLOW_MISSING_DEPENDENCIES=true
+```
+
+## Links
+
+* https://github.com/diepquynh/android_kernel_samsung_grandprimeve3g
+* https://github.com/Shubzz-02/Samsung_grandprimevelte_Kernel
+* https://github.com/TeamWin/android_device_samsung_grandprimevelte
