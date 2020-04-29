@@ -115,17 +115,13 @@ On the smartphone used as reference, this file can be flashed with Odin (tested 
 
 ### Create Debian SD card
 
-[Debootstrap](https://wiki.debian.org/Debootstrap) makes it super easy to populate a root file system for an architecture supported by [Debian](https://www.debian.org/).
+[Debootstrap](https://wiki.debian.org/Debootstrap) makes it super easy to populate a root file system for an architecture supported by [Debian](https://www.debian.org/):
 
 ```
-$ qemu-debootstrap \
-  --foreign \
-  --arch=armhf \
-  --include=net-tools,openssh-server,wpasupplicant \
-  jessie \
-  /path/to/mounted/sdcard \
-  http://ftp.debian.org/debian
+$ make rootfs_sdcard
 ```
+
+An archive of the root file system is created under *output/sdcard/rootfs.tar.gz*, ready to be extracted at the root of the SD card.
 
 ### Screenshots
 
