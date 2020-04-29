@@ -59,8 +59,6 @@ $(dir_output)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel_ramf
 		-p $(dir_kernel_ramfs)/scripts/dtc/ \
 		-s 2048 \
 		$(dir_kernel_ramfs)/arch/arm64/boot/dts/
-	echo TODO fix workaround as the generated file prevents booting
-	curl https://raw.githubusercontent.com/TeamWin/android_device_samsung_grandprimevelte/android-5.1/dt.img > $(dir_output)/dt.img
 
 $(dir_kernel_sdcard)/arch/arm64/boot/uImage: $(dir_kernel_sdcard)/arch/arm64/boot/Image.gz $(dir_buildroot)/output/host/bin/mkimage
 	$(dir_buildroot)/output/host/bin/mkimage \
