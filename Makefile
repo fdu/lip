@@ -110,10 +110,10 @@ $(dir_kernel_toolchain):
 	git clone $(url_kernel_toolchain) $(dir_kernel_toolchain)
 
 $(dir_kernel_sdcard):
-	git clone $(url_kernel) $(dir_kernel_sdcard)
+	git clone $(url_kernel) $(dir_kernel_sdcard) -b $(revision_git_kernel)
 
 $(dir_kernel_ramfs):
-	git clone $(url_kernel) $(dir_kernel_ramfs)
+	git clone $(url_kernel) $(dir_kernel_ramfs) -b $(revision_git_kernel)
 
 $(dir_kernel_sdcard)/.config:
 	ln -sf `pwd`/$(dir_configs)/kernel_sdcard $(dir_kernel_sdcard)/.config
