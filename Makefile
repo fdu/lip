@@ -6,6 +6,7 @@ dir_buildroot = $(dir_work)/buildroot
 dir_configs = $(dir_src)/configs
 dir_patches = $(dir_src)/patches
 dir_kernel_sdcard = $(dir_work)/kernel_sdcard
+dir_rootfs_sdcard = $(dir_work)/rootfs_sdcard
 dir_kernel_ramfs = $(dir_work)/kernel_ramfs
 dir_kernel_toolchain = $(dir_work)/kernel_toolchain
 archive_buildroot = buildroot.tar.gz
@@ -15,6 +16,19 @@ url_kernel = https://github.com/Shubzz-02/Samsung_grandprimevelte_Kernel
 revision_git_kernel = master
 KERNEL_ARCH=arm64
 KERNEL_CROSS_COMPILE=PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.8/aarch64-linux-android-
+
+rootfs_sdcard:
+	mkdir -p $(dir_rootfs_sdcard)
+	qemu-debootstrap \
+		--arch=armhf \
+		--include=net-tools,openssh-server,wpasupplicant \
+		jessie \
+		$(dir_rootfs_sdcard) \
+		http://ftp.debian.org/debian
+	cp -r $(dir_src)/overlay/sdcard/* $(dir_rootfs_sdcard)/
+	tar zcvf $(dir_output)/sdcard/rootfs.tar.gz \
+		-C $(dir_rootfs_sdcard) \
+		*
 
 recovery_sdcard: $(dir_output)/sdcard/recovery.img.tar
 	

@@ -1,0 +1,9 @@
+[Unit]
+Description=Android properties
+
+[Service]
+Type=oneshot
+ExecStart=/etc/androidproperties.sh
+
+[Install]
+WantedBy=multi-user.target

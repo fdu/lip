@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo 0 > /sys/class/android_usb/android0/enable
+echo 4b13481221aea200 > /sys/class/android_usb/android0/iSerial
+echo Samsung > /sys/class/android_usb/android0/f_rndis/manufacturer
+echo rndis > /sys/class/android_usb/android0/functions
+echo 0x04e8 > /sys/class/android_usb/android0/idVendor
+echo 0x6860 > /sys/class/android_usb/android0/idProduct
+echo 1 > /sys/class/android_usb/android0/f_rndis/wceis
+echo SAMSUNG > /sys/class/android_usb/android0/iManufacturer
+echo SAMSUNG_Android > /sys/class/android_usb/android0/iProduct
+echo 1 > /sys/class/android_usb/android0/enable
