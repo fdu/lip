@@ -58,3 +58,13 @@ $ ifup wlan0
 ```
 
 Alternatively, *src/overlay/ramfs/etc/network/interfaces* can be edited so that the interface is brought up at startup by uncommenting *auto wlan0*.
+
+### Screenshots
+
+RAM disk boot menu
+
+![](images/ramdisk_bootmenu.png)
+
+RAM disk shell with Buildroot
+
+![](images/ramdisk_shell.png)
