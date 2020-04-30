@@ -131,7 +131,7 @@ autologin-user=deb
 ...
 ```
 
-
+![](doc/images/screenshot_xfce4_desktop.png)
 
 # More pages
 
