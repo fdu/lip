@@ -8,7 +8,7 @@ Plenty of smartphones are sadly lying around, waiting for a second life. Most of
 
 # Run Debian on your smartphone
 
-## Build the system from scratch
+## Build from scratch
 
 The Makefile in this repository will take care of the whole build process, from fetching the source to compiling and assembling the system images. Let's start by getting the required files:
 
@@ -39,6 +39,28 @@ Insert the SD card into the smartphone, reboot in recovery mode. The following l
 ![](doc/images/debian_jessie_console_login.png)
 
 Congratulations, this is Debian running on your smartphone!
+
+## Take the control
+
+With [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) enabled, an USB keyboard can be connected to interact with the login prompt. This implies editing the */etc/shadow* file on the SD card from another machine beforehand, in order to set the root password.
+
+Alternatively, this minimal Debian system run a SSH server. If connected to a USB host, a USB ethernet network adapter is brought up at boot with IP 192.168.234.2. By setting IP 192.168.234.1 on the host, the Debian smartphone answers to ping. Before connecting over SSH, either a user and password must be added in the SD card from another machine, or the public SSH key of the host must be copied to */root/.ssh/authorized_keys*.
+
+```
+$ ssh root@192.168.234.2
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+root@grandprime:~#
+```
+
+Welcome to Debian on your phone!
+
+By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
 # More pages
 
