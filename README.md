@@ -62,7 +62,27 @@ Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
-## Add Xorg
+## Wi-Fi
+
+Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
+* mrvl/bt_init_cfg.conf
+* mrvl/SDIO8777_SDIO_SDIO.bin
+* mrvl/txpwrlimit_cfg.bin
+* mrvl/sd8777_uapsta.bin
+* mrvl/WlanCalData_ext.conf
+* mrvl/bt_cal_data.conf
+* mrvl/txbackoff.txt
+* mrvl/txpower_FC.bin
+* mrvl/reg_alpha2
+* ispfw_v325.bin
+
+Add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with the interface *wlan0*. Then to bring it up:
+
+```
+$ ifup wlan0
+```
+
+## Xorg
 
 [Xorg](https://www.x.org) comes with a frame buffer driver with good enough performances for many applications with [Xfce](https://xfce.org/). Let's start by installing it:
 
