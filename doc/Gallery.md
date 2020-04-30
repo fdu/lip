@@ -1,45 +1,51 @@
 # Gallery
 
-## Desktop
+## Console
+
+Debian jessie console login
+
+![](images/debian_jessie_console_login.png)
+
+## Desktop
 
 Desktop on smartphone
 
-![](doc/images/desktop_on_smartphone.png)
+![](images/desktop_on_smartphone.png)
 
 Xfce4 desktop
 
-![](doc/images/screenshot_xfce4_desktop.png)
+![](images/screenshot_xfce4_desktop.png)
 
 Multitask
 
-![](doc/images/screenshot_xfce4_multitask.png)
+![](images/screenshot_xfce4_multitask.png)
 
 VLC
 
-![](doc/images/screenshot_xfce4_vlc.png)
+![](images/screenshot_xfce4_vlc.png)
 
 htop
 
-![](doc/images/screenshot_xfce4_htop.png)
+![](images/screenshot_xfce4_htop.png)
 
 SuperTuxKart
 
-![](doc/images/screenshot_xfce4_supertuxkart.png)
+![](images/screenshot_xfce4_supertuxkart.png)
 
 LibreOffice Writer
 
-![](doc/images/screenshot_xfce4_writer.png)
+![](images/screenshot_xfce4_writer.png)
 
 LibreOffice Calc
 
-![](doc/images/screenshot_xfce4_calc.png)
+![](images/screenshot_xfce4_calc.png)
 
 ## RAM disk
 
 RAM disk boot menu
 
-![](doc/images/ramdisk_bootmenu.png)
+![](images/ramdisk_bootmenu.png)
 
 RAM disk shell with Buildroot
 
-![](doc/images/ramdisk_shell.png)
+![](images/ramdisk_shell.png)
