@@ -91,11 +91,11 @@ Alternatively, *src/overlay/ramfs/etc/network/interfaces* can be edited so that 
 
 RAM disk boot menu
 
-![](doc/ramdisk_bootmenu.png)
+![](doc/images/ramdisk_bootmenu.png)
 
 RAM disk shell with Buildroot
 
-![](doc/ramdisk_shell.png)
+![](doc/images/ramdisk_shell.png)
 
 ## Recovery image with file system on SD card
 
@@ -127,31 +127,31 @@ An archive of the root file system is created under *output/sdcard/rootfs.tar.gz
 
 Xfce4 desktop
 
-![](doc/screenshot_xfce4_desktop.png)
+![](doc/images/screenshot_xfce4_desktop.png)
 
 Multitask
 
-![](doc/screenshot_xfce4_multitask.png)
+![](doc/images/screenshot_xfce4_multitask.png)
 
 VLC
 
-![](doc/screenshot_xfce4_vlc.png)
+![](doc/images/screenshot_xfce4_vlc.png)
 
 htop
 
-![](doc/screenshot_xfce4_htop.png)
+![](doc/images/screenshot_xfce4_htop.png)
 
 SuperTuxKart
 
-![](doc/screenshot_xfce4_supertuxkart.png)
+![](doc/images/screenshot_xfce4_supertuxkart.png)
 
 LibreOffice Writer
 
-![](doc/screenshot_xfce4_writer.png)
+![](doc/images/screenshot_xfce4_writer.png)
 
 LibreOffice Calc
 
-![](doc/screenshot_xfce4_calc.png)
+![](doc/images/screenshot_xfce4_calc.png)
 
 # External references
 
