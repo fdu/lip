@@ -40,7 +40,7 @@ Insert the SD card into the smartphone, reboot in recovery mode. The following l
 
 Congratulations, this is Debian running on your smartphone!
 
-## Take the control
+## Take control
 
 With [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) enabled, an USB keyboard can be connected to interact with the login prompt. This implies editing the */etc/shadow* file on the SD card from another machine beforehand, in order to set the root password.
 
@@ -61,6 +61,25 @@ root@grandprime:~#
 Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
+
+## Add Xorg
+
+[Xorg](https://www.x.org) comes with a frame buffer driver with good enough performances for many applications with [Xfce](https://xfce.org/). Let's start by installing it:
+
+```
+$ apt update
+$ apt install xfce4 lightdm
+```
+
+Stride / pitch issues can be fixed with fbset:
+
+```
+$ fbset -xres 536 -yres 960
+```
+
+The LightDM login screen should be visible:
+
+![](doc/images/debian_jessie_lightdm_portrait_login.png)
 
 # More pages
 
