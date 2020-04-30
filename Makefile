@@ -22,7 +22,8 @@ all: rootfs_sdcard recovery_sdcard
 
 rootfs_sdcard:
 	mkdir -p $(dir_rootfs_sdcard)
-	qemu-debootstrap \
+	-debootstrap \
+		--foreign \
 		--arch=armhf \
 		--include=net-tools,openssh-server,wpasupplicant \
 		jessie \
