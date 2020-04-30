@@ -12,6 +12,10 @@ Desktop on smartphone
 
 ![](images/desktop_on_smartphone.png)
 
+Light DM
+
+![](images/debian_jessie_lightdm_landscape_login.png)
+
 Xfce4 desktop
 
 ![](images/screenshot_xfce4_desktop.png)
