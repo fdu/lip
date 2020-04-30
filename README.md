@@ -81,6 +81,19 @@ The LightDM login screen should be visible:
 
 ![](doc/images/debian_jessie_lightdm_portrait_login.png)
 
+To rotate it, create the file */etc/X11/xorg.conf* with:
+
+```
+Section "Device"  
+  Identifier "fb"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb0"
+  Option "Rotate" "CW"
+EndSection
+```
+
+![](doc/images/debian_jessie_lightdm_landscape_login.png)
+
 # More pages
 
 * [Gallery](doc/Gallery.md)
