@@ -1,6 +1,4 @@
-# TWRP
-
-## Build
+# Build TWRP
 
 To build TWRP for the smartphone used as reference, the following Docker container can be used:
 
@@ -45,9 +43,3 @@ Finally build with:
 $ lunch omni_grandprimevelte-eng
 $ mka recoveryimage ALLOW_MISSING_DEPENDENCIES=true
 ```
-
-## Links
-
-* https://github.com/diepquynh/android_kernel_samsung_grandprimeve3g
-* https://github.com/Shubzz-02/Samsung_grandprimevelte_Kernel
-* https://github.com/TeamWin/android_device_samsung_grandprimevelte
