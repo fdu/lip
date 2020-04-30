@@ -81,6 +81,58 @@ The LightDM login screen should be visible:
 
 ![](doc/images/debian_jessie_lightdm_portrait_login.png)
 
+To rotate it, create the file */etc/X11/xorg.conf* with:
+
+```
+Section "Device"  
+  Identifier "fb"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb0"
+  Option "Rotate" "CW"
+EndSection
+```
+
+![](doc/images/debian_jessie_lightdm_landscape_login.png)
+
+To auto-login and start directly to the Xfce desktop, let's add an user:
+
+```
+$ adduser deb 
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LANG = "fr_FR.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to the standard locale ("C").
+Adding user `deb' ...
+Adding new group `deb' (1001) ...
+Adding new user `deb' (1001) with group `deb' ...
+Creating home directory `/home/deb' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+Changing the user information for deb
+Enter the new value, or press ENTER for the default
+	Full Name []: 
+	Room Number []: 
+	Work Phone []: 
+	Home Phone []: 
+	Other []: 
+Is the information correct? [Y/n]
+```
+
+Then set the following in */etc/lightdm/lightdm.conf*:
+
+```
+[SeatDefaults]
+autologin-user=deb
+...
+```
+
+![](doc/images/screenshot_xfce4_desktop.png)
+
 # More pages
 
 * [Gallery](doc/Gallery.md)
