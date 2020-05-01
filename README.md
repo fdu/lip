@@ -153,6 +153,37 @@ autologin-user=deb
 
 ![](doc/images/screenshot_xfce4_desktop.png)
 
+## Docker
+
+The complete instructions to install Docker on debian are [here](https://docs.docker.com/engine/install/debian/). In our case it is:
+
+```
+$ apt install apt-transport-https curl
+$ curl -kfsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+```
+
+Then in */etc/apt/sources.list* add:
+
+```
+deb [arch=armhf] https://download.docker.com/linux/debian jessie stable
+
+```
+
+As overlay is not available, [VFS](https://docs.docker.com/storage/storagedriver/vfs-driver/) can be use for storage. Create the file */etc/docker/daemon.json* with:
+
+```
+{
+  "storage-driver": "vfs"
+}
+```
+
+Finally to install Docker:
+
+```
+$ apt update
+$ apt install docker-ce
+```
+
 # More pages
 
 * [Gallery](doc/Gallery.md)
