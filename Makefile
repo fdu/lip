@@ -23,6 +23,7 @@ all: rootfs_sdcard recovery_sdcard
 rootfs_sdcard:
 	mkdir -p $(dir_rootfs_sdcard)
 	mkdir -p $(dir_output)/sdcard
+	@which qemu-debootstrap || echo "qemu-debootstrap not found in path, this will probably fail"
 	qemu-debootstrap \
 		--arch=armhf \
 		--include=net-tools,openssh-server,wpasupplicant \
