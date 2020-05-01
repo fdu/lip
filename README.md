@@ -62,7 +62,27 @@ Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
-## Add Xorg
+## Wi-Fi
+
+Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
+* mrvl/bt_init_cfg.conf
+* mrvl/SDIO8777_SDIO_SDIO.bin
+* mrvl/txpwrlimit_cfg.bin
+* mrvl/sd8777_uapsta.bin
+* mrvl/WlanCalData_ext.conf
+* mrvl/bt_cal_data.conf
+* mrvl/txbackoff.txt
+* mrvl/txpower_FC.bin
+* mrvl/reg_alpha2
+* ispfw_v325.bin
+
+Add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with the interface *wlan0*. Then to bring it up:
+
+```
+$ ifup wlan0
+```
+
+## Xorg
 
 [Xorg](https://www.x.org) comes with a frame buffer driver with good enough performances for many applications with [Xfce](https://xfce.org/). Let's start by installing it:
 
@@ -132,6 +152,37 @@ autologin-user=deb
 ```
 
 ![](doc/images/screenshot_xfce4_desktop.png)
+
+## Docker
+
+The complete instructions to install Docker on debian are [here](https://docs.docker.com/engine/install/debian/). In our case it is:
+
+```
+$ apt install apt-transport-https curl
+$ curl -kfsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+```
+
+Then in */etc/apt/sources.list* add:
+
+```
+deb [arch=armhf] https://download.docker.com/linux/debian jessie stable
+
+```
+
+As overlay is not available, [VFS](https://docs.docker.com/storage/storagedriver/vfs-driver/) can be use for storage. Create the file */etc/docker/daemon.json* with:
+
+```
+{
+  "storage-driver": "vfs"
+}
+```
+
+Finally to install Docker:
+
+```
+$ apt update
+$ apt install docker-ce
+```
 
 # More pages
 
