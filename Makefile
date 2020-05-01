@@ -31,7 +31,7 @@ rootfs_sdcard:
 		$(dir_rootfs_sdcard) \
 		http://ftp.debian.org/debian
 	cp -r $(dir_src)/overlay/sdcard/* $(dir_rootfs_sdcard)/
-	cd $(dir_rootfs_sdcard) && tar zcvf ../../$(dir_output)/sdcard/rootfs.tar.gz *
+	cd $(dir_rootfs_sdcard) && tar zcf ../../$(dir_output)/sdcard/rootfs.tar.gz *
 
 recovery_sdcard: $(dir_output)/sdcard/recovery.img.tar
 	
