@@ -186,7 +186,6 @@ BusyBox v1.31.1 (2020-04-13 23:06:12 UTC) multi-call binary.
 [Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution to run the lightweight desktop environment [Xfce](https://xfce.org/). Let's start by installing it:
 
 ```
-$ apt update
 $ apt install xfce4 lightdm
 ```
 
@@ -245,6 +244,16 @@ autologin-user=deb
 ```
 
 ![](doc/images/debian_buster_xfce4_desktop.png)
+
+## Telegram
+
+The following will install the [Telegram](https://telegram.org/) desktop client and [Florence](http://florence.sourceforge.net/english/index.html) as virtual keyboard to type messages with the touchscreen:
+
+```
+$ apt install florence telegram-desktop
+```
+
+![](doc/images/debian_buster_telegram.png)
 
 # More pages
 
