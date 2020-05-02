@@ -1,3 +1,4 @@
 #!/bin/sh
 
 echo 0 > /sys/class/backlight/panel/brightness
+echo 1 > /sys/devices/platform/soc.2/d4200000.axi/fbbase.3/graphics/fb0/blank
