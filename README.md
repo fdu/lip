@@ -8,7 +8,7 @@ Plenty of smartphones are sadly lying around, waiting for a second life. Most of
 
 # Run Debian on your smartphone
 
-## Build from scratch
+## Build images
 
 The Makefile in this repository will take care of the whole build process, from fetching the source to compiling and assembling the system images. Let's start by getting the required files:
 
@@ -36,7 +36,7 @@ An archive of the root file system has been created under *output/sdcard/rootfs.
 
 Insert the SD card into the smartphone, reboot in recovery mode. The following login prompt should be visible:
 
-![](doc/images/debian_jessie_console_login.png)
+![](doc/images/debian_buster_console_login.png)
 
 Congratulations, this is Debian running on your smartphone!
 
@@ -99,7 +99,7 @@ $ fbset -xres 536 -yres 960
 
 The LightDM login screen should be visible:
 
-![](doc/images/debian_jessie_lightdm_portrait_login.png)
+![](doc/images/debian_buster_lightdm_portrait_login.png)
 
 To rotate it, create the file */etc/X11/xorg.conf* with:
 
@@ -112,7 +112,7 @@ Section "Device"
 EndSection
 ```
 
-![](doc/images/debian_jessie_lightdm_landscape_login.png)
+![](doc/images/debian_buster_lightdm_landscape_login.png)
 
 To auto-login and start directly to the Xfce desktop, let's add an user:
 
