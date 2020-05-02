@@ -196,6 +196,16 @@ Stride / pitch issues can be fixed with fbset:
 $ fbset -xres 536 -yres 960
 ```
 
+To execute it whenever lightdm starts, add it to */lib/systemd/system/lightdm.service*:
+
+```
+...
+ExecStart=/usr/sbin/lightdm
+ExecStartPost=/bin/fbset -xres 536 -yres 960
+Restart=always
+...
+```
+
 The LightDM login screen appears and the pointer can be controller with the touchscreen:
 
 ![](doc/images/debian_buster_lightdm_portrait_login.png)
