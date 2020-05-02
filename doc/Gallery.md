@@ -2,11 +2,27 @@
 
 ## Console
 
+Debian buster console login
+
+![](images/debian_buster_console_login.png)
+
 Debian jessie console login
 
 ![](images/debian_jessie_console_login.png)
 
-## Desktop
+## Desktop (buster)
+
+Light DM
+
+![](images/debian_buster_lightdm_portrait_login.png)
+
+![](images/debian_buster_lightdm_landscape_login.png)
+
+Xfce4 desktop
+
+![](images/debian_buster_xfce4_desktop.png)
+
+## Desktop (jessie)
 
 Desktop on smartphone
 
