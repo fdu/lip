@@ -111,66 +111,11 @@ Wi-Fi requires binary firmware files. They must be extracted over from an origin
 * mrvl/reg_alpha2
 * ispfw_v325.bin
 
-Add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with the interface *wlan0*. Then to bring it up:
+To use Wi-Fi in sation mode from the command line, add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with the interface *wlan0*. Then to bring it up with:
 
 ```
 $ ifup wlan0
 ```
-
-## Desktop
-
-[Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution to run the lightweight desktop environment [Xfce](https://xfce.org/). Let's start by installing it:
-
-```
-$ apt update
-$ apt install xfce4 lightdm
-```
-
-Stride / pitch issues can be fixed with fbset:
-
-```
-$ fbset -xres 536 -yres 960
-```
-
-The LightDM login screen appears and the pointer can be controller with the touchscreen:
-
-![](doc/images/debian_buster_lightdm_portrait_login.png)
-
-To switch to landscape orientation, create the file */etc/X11/xorg.conf* with:
-
-```
-Section "Device"  
-  Identifier "fb"
-  Driver "fbdev"
-  Option "fbdev" "/dev/fb0"
-  Option "Rotate" "CW"
-EndSection
-```
-
-![](doc/images/debian_buster_lightdm_landscape_login.png)
-
-To auto-login and start directly to the Xfce desktop, let's add an user:
-
-```
-$ adduser deb 
-Adding user `deb' ...
-Adding new group `deb' (1001) ...
-Adding new user `deb' (1001) with group `deb' ...
-Creating home directory `/home/deb' ...
-Copying files from `/etc/skel' ...
-Enter new UNIX password: 
-...
-```
-
-Then set the following in */etc/lightdm/lightdm.conf*:
-
-```
-[SeatDefaults]
-autologin-user=deb
-...
-```
-
-![](doc/images/debian_buster_xfce4_desktop.png)
 
 ## Docker
 
@@ -235,6 +180,61 @@ Status: Downloaded newer image for busybox:latest
 BusyBox v1.31.1 (2020-04-13 23:06:12 UTC) multi-call binary.
 ...
 ```
+
+## Desktop
+
+[Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution to run the lightweight desktop environment [Xfce](https://xfce.org/). Let's start by installing it:
+
+```
+$ apt update
+$ apt install xfce4 lightdm
+```
+
+Stride / pitch issues can be fixed with fbset:
+
+```
+$ fbset -xres 536 -yres 960
+```
+
+The LightDM login screen appears and the pointer can be controller with the touchscreen:
+
+![](doc/images/debian_buster_lightdm_portrait_login.png)
+
+To switch to landscape orientation, create the file */etc/X11/xorg.conf* with:
+
+```
+Section "Device"  
+  Identifier "fb"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb0"
+  Option "Rotate" "CW"
+EndSection
+```
+
+![](doc/images/debian_buster_lightdm_landscape_login.png)
+
+To auto-login and start directly to the Xfce desktop, let's add an user:
+
+```
+$ adduser deb 
+Adding user `deb' ...
+Adding new group `deb' (1001) ...
+Adding new user `deb' (1001) with group `deb' ...
+Creating home directory `/home/deb' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+...
+```
+
+Then set the following in */etc/lightdm/lightdm.conf*:
+
+```
+[SeatDefaults]
+autologin-user=deb
+...
+```
+
+![](doc/images/debian_buster_xfce4_desktop.png)
 
 # More pages
 
