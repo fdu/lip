@@ -62,6 +62,41 @@ Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
+## Install packages
+
+Our base Debian system is ready to install more software packages through network. The Android kernel with *CONFIG_ANDROID_PARANOID_NETWORK* requires users to be added to groups with predefined GIDs in order to access network. First let's create those groups:
+
+```
+$ groupadd -g 3001 aid_bt
+$ groupadd -g 3002 aid_bt_net
+$ groupadd -g 3003 aid_inet
+$ groupadd -g 3004 aid_net_raw
+$ groupadd -g 3005 aid_admin
+```
+
+Then add *root* to those, to solve issues such as permission denied when sending a ping request:
+
+```
+$ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin root
+```
+
+To install packages with apt, the user *_apt* also needs some permissions:
+
+```
+$ usermod -G nogroup -g aid_inet _apt
+```
+
+With this we can install packages:
+
+```
+$ apt update
+Hit:1 http://deb.debian.org/debian buster InRelease
+Reading package lists... Done
+Building dependency tree... Done
+All packages are up to date.
+$ apt install nano
+```
+
 ## Wi-Fi
 
 Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
@@ -82,9 +117,9 @@ Add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with 
 $ ifup wlan0
 ```
 
-## Xorg
+## Desktop
 
-[Xorg](https://www.x.org) comes with a frame buffer driver with good enough performances for many applications with [Xfce](https://xfce.org/). Let's start by installing it:
+[Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution for [Xfce](https://xfce.org/). Let's start by installing it:
 
 ```
 $ apt update
@@ -101,7 +136,7 @@ The LightDM login screen should be visible:
 
 ![](doc/images/debian_buster_lightdm_portrait_login.png)
 
-To rotate it, create the file */etc/X11/xorg.conf* with:
+To switch to landscape orientation, create the file */etc/X11/xorg.conf* with:
 
 ```
 Section "Device"  
@@ -118,29 +153,13 @@ To auto-login and start directly to the Xfce desktop, let's add an user:
 
 ```
 $ adduser deb 
-perl: warning: Setting locale failed.
-perl: warning: Please check that your locale settings:
-	LANGUAGE = (unset),
-	LC_ALL = (unset),
-	LANG = "fr_FR.UTF-8"
-    are supported and installed on your system.
-perl: warning: Falling back to the standard locale ("C").
 Adding user `deb' ...
 Adding new group `deb' (1001) ...
 Adding new user `deb' (1001) with group `deb' ...
 Creating home directory `/home/deb' ...
 Copying files from `/etc/skel' ...
 Enter new UNIX password: 
-Retype new UNIX password: 
-passwd: password updated successfully
-Changing the user information for deb
-Enter the new value, or press ENTER for the default
-	Full Name []: 
-	Room Number []: 
-	Work Phone []: 
-	Home Phone []: 
-	Other []: 
-Is the information correct? [Y/n]
+...
 ```
 
 Then set the following in */etc/lightdm/lightdm.conf*:
@@ -158,14 +177,14 @@ autologin-user=deb
 The complete instructions to install Docker on debian are [here](https://docs.docker.com/engine/install/debian/). In our case it is:
 
 ```
-$ apt install apt-transport-https curl
+$ apt install apt-transport-https curl gnupg
 $ curl -kfsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 ```
 
 Then in */etc/apt/sources.list* add:
 
 ```
-deb [arch=armhf] https://download.docker.com/linux/debian jessie stable
+deb [arch=armhf] https://download.docker.com/linux/debian buster stable
 
 ```
 
