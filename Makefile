@@ -27,7 +27,7 @@ rootfs_sdcard:
 	qemu-debootstrap \
 		--arch=armhf \
 		--include=net-tools,openssh-server,wpasupplicant \
-		jessie \
+		buster \
 		$(dir_rootfs_sdcard) \
 		http://ftp.debian.org/debian
 	cp -r $(dir_src)/overlay/sdcard/* $(dir_rootfs_sdcard)/
