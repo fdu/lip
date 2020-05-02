@@ -22,6 +22,10 @@ Xfce4 desktop
 
 ![](images/debian_buster_xfce4_desktop.png)
 
+Telegram
+
+![](images/debian_buster_telegram.png)
+
 ## Desktop (jessie)
 
 Desktop on smartphone
