@@ -170,7 +170,7 @@ autologin-user=deb
 ...
 ```
 
-![](doc/images/screenshot_xfce4_desktop.png)
+![](doc/images/debian_buster_xfce4_desktop.png)
 
 ## Docker
 
