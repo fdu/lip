@@ -181,7 +181,7 @@ BusyBox v1.31.1 (2020-04-13 23:06:12 UTC) multi-call binary.
 ...
 ```
 
-## Desktop
+## Xfce4 desktop
 
 [Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution to run the lightweight desktop environment [Xfce](https://xfce.org/). Let's start by installing it:
 
@@ -195,7 +195,7 @@ Stride / pitch issues can be fixed with fbset:
 $ fbset -xres 536 -yres 960
 ```
 
-To execute it whenever lightdm starts, add it to */lib/systemd/system/lightdm.service*:
+To execute it whenever LightDM starts, add it to */lib/systemd/system/lightdm.service*:
 
 ```
 ...
@@ -244,6 +244,23 @@ autologin-user=deb
 ```
 
 ![](doc/images/debian_buster_xfce4_desktop.png)
+
+## Gnome desktop
+
+```
+$ apt install gnome-core
+```
+
+*/usr/lib/systemd/system/gdm3.service*
+
+```
+...
+[Service]
+ExecStartPre=/usr/share/gdm/generate-config
+ExecStart=/usr/sbin/gdm3
+ExecStartPost=/bin/fbset -xres 536 -yres 960
+...
+```
 
 ## Telegram
 
