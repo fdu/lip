@@ -262,6 +262,10 @@ ExecStartPost=/bin/fbset -xres 536 -yres 960
 ...
 ```
 
+```
+$ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
+```
+
 ## Telegram
 
 The following will install the [Telegram](https://telegram.org/) desktop client and [Florence](http://florence.sourceforge.net/english/index.html) as virtual keyboard to type messages with the touchscreen:
