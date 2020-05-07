@@ -270,7 +270,7 @@ $ apt install gnome-core
 
 The GDM login screen appears and the pointer can be controlled with the touchscreen:
 
-
+![](doc/images/debian_buster_gdm_portrait_login.png)
 
 To auto-login and start directly to the desktop, set the following in */etc/gdm3/daemon.conf*:
 
@@ -281,6 +281,10 @@ AutomaticLoginEnable = true
 AutomaticLogin = deb
 ...
 ```
+
+![](doc/images/debian_buster_gnome_notifications.png)
+
+![](doc/images/debian_buster_gnome_activities.png)
 
 ### Telegram
 
