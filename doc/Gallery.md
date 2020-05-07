@@ -10,7 +10,25 @@ Debian jessie console login
 
 ![](images/debian_jessie_console_login.png)
 
-## Desktop (buster)
+## Gnome desktop (buster)
+
+GDM
+
+![](images/debian_buster_gdm_portrait_login.png)
+
+Activities
+
+![](images/debian_buster_gnome_activities.png)
+
+Notifications
+
+![](images/debian_buster_gnome_notifications.png)
+
+Settings
+
+![](images/debian_buster_gnome_settings.png)
+
+## Xfce4 desktop (buster)
 
 Light DM
 
@@ -18,7 +36,7 @@ Light DM
 
 ![](images/debian_buster_lightdm_landscape_login.png)
 
-Xfce4 desktop
+Desktop
 
 ![](images/debian_buster_xfce4_desktop.png)
 
@@ -26,9 +44,9 @@ Telegram
 
 ![](images/debian_buster_telegram.png)
 
-## Desktop (jessie)
+## Xfce4 desktop (jessie)
 
-Desktop on smartphone
+Desktop
 
 ![](images/desktop_on_smartphone.png)
 
