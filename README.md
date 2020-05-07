@@ -118,6 +118,13 @@ Reading package lists... Done
 Building dependency tree... Done
 All packages are up to date.
 $ apt install sudo
+...
+```
+
+Finally, to allow *sudo* without password:
+
+```
+$ echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
 ### Wi-Fi
