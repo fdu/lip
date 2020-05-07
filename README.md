@@ -219,6 +219,8 @@ From a graphic environment, *wlan0* will be picked by the *NetworkManager* (see 
 
 The frame buffer device and console support is enabled in the kernel, which is how the login prompt is visible. It also offers good enough performances to run [Xorg](https://www.x.org) with the frame buffer driver as a fall back solution.
 
+The command *display_on* and *display_off* control the display power state.
+
 The issue with incorrect stride / pitch as well as pixel format can be solved by running *fbset*:
 
 ```
