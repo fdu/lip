@@ -6,7 +6,7 @@ Plenty of smartphones are sadly lying around, waiting for a second life. Most of
 
 ![](doc/images/desktop_on_smartphone.png)
 
-# Run Debian on your smartphone
+# Run Debian on your smartphone!
 
 ## Build images
 
@@ -40,7 +40,9 @@ Insert the SD card into the smartphone, reboot in recovery mode. The following l
 
 Congratulations, this is Debian running on your smartphone!
 
-## Take control
+## Configure
+
+### Use the console and SSH
 
 With [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) enabled, an USB keyboard can be connected to interact with the login prompt. This implies editing the */etc/shadow* file on the SD card from another machine beforehand, in order to set the root password.
 
@@ -62,9 +64,9 @@ Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
-## Install packages
+### Give user permissions
 
-Our base Debian system is ready to install more software packages through network. The Android kernel with *CONFIG_ANDROID_PARANOID_NETWORK* requires users to be added to groups with predefined GIDs in order to access network. First let's create those groups:
+The Android kernel with *CONFIG_ANDROID_PARANOID_NETWORK* requires users to be added to groups with predefined GIDs in order to access network. First let's create those groups:
 
 ```
 $ groupadd -g 3001 aid_bt
@@ -74,19 +76,40 @@ $ groupadd -g 3004 aid_net_raw
 $ groupadd -g 3005 aid_admin
 ```
 
-Then add *root* to those, to solve issues such as permission denied when sending a ping request:
+Then add *root* to those groups:
 
 ```
 $ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin root
 ```
 
-To install packages with apt, the user *_apt* also needs some permissions:
+A normal user is added with:
+
+```
+$ adduser deb 
+Adding user `deb' ...
+Adding new group `deb' (1001) ...
+Adding new user `deb' (1001) with group `deb' ...
+Creating home directory `/home/deb' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+...
+```
+
+Just like for *root*, this user needs to be added to the network permission groups:
+
+```
+$ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin deb
+```
+
+### Install packages
+
+To install packages with *apt*, the user *_apt* needs some of the network permissions:
 
 ```
 $ usermod -G nogroup -g aid_inet _apt
 ```
 
-With this we can install packages:
+The system is now ready to install more software packages through network. For example to install *sudo*:
 
 ```
 $ apt update
@@ -94,10 +117,10 @@ Hit:1 http://deb.debian.org/debian buster InRelease
 Reading package lists... Done
 Building dependency tree... Done
 All packages are up to date.
-$ apt install nano
+$ apt install sudo
 ```
 
-## Wi-Fi
+### Wi-Fi
 
 Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
 * mrvl/bt_init_cfg.conf
@@ -222,20 +245,7 @@ EndSection
 
 ![](doc/images/debian_buster_lightdm_landscape_login.png)
 
-To auto-login and start directly to the Xfce desktop, let's add an user:
-
-```
-$ adduser deb 
-Adding user `deb' ...
-Adding new group `deb' (1001) ...
-Adding new user `deb' (1001) with group `deb' ...
-Creating home directory `/home/deb' ...
-Copying files from `/etc/skel' ...
-Enter new UNIX password: 
-...
-```
-
-Then set the following in */etc/lightdm/lightdm.conf*:
+To auto-login and start directly to the Xfce desktop, set the following in */etc/lightdm/lightdm.conf*:
 
 ```
 [SeatDefaults]
