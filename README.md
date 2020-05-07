@@ -42,7 +42,7 @@ Congratulations, this is Debian running on your smartphone!
 
 ## Configure
 
-### Use the console and SSH
+### Console and SSH
 
 With [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) enabled, an USB keyboard can be connected to interact with the login prompt. This implies editing the */etc/shadow* file on the SD card from another machine beforehand, in order to set the root password.
 
@@ -64,7 +64,7 @@ Welcome to Debian on your phone!
 
 By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
 
-### Give user permissions
+### User permissions
 
 The Android kernel with *CONFIG_ANDROID_PARANOID_NETWORK* requires users to be added to groups with predefined GIDs in order to access network. First let's create those groups:
 
@@ -101,7 +101,7 @@ Just like for *root*, this user needs to be added to the network permission grou
 $ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin deb
 ```
 
-### Install packages
+### Packages
 
 To install packages with *apt*, the user *_apt* needs some of the network permissions:
 
@@ -127,27 +127,7 @@ Finally, to allow *sudo* without password:
 $ echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
-### Wi-Fi
-
-Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
-* mrvl/bt_init_cfg.conf
-* mrvl/SDIO8777_SDIO_SDIO.bin
-* mrvl/txpwrlimit_cfg.bin
-* mrvl/sd8777_uapsta.bin
-* mrvl/WlanCalData_ext.conf
-* mrvl/bt_cal_data.conf
-* mrvl/txbackoff.txt
-* mrvl/txpower_FC.bin
-* mrvl/reg_alpha2
-* ispfw_v325.bin
-
-To use Wi-Fi in sation mode from the command line, add *wpa-ssid* and *wpa-psk* to */etc/network/interfaces* for your network with the interface *wlan0*. Then to bring it up with:
-
-```
-$ ifup wlan0
-```
-
-## Docker
+### Docker
 
 The complete instructions to install [Docker](https://www.docker.com/) on Debian are [here](https://docs.docker.com/engine/install/debian/). In our case it is:
 
@@ -211,35 +191,41 @@ BusyBox v1.31.1 (2020-04-13 23:06:12 UTC) multi-call binary.
 ...
 ```
 
-## Xfce4 desktop
+### Wi-Fi
 
-[Xorg](https://www.x.org) comes with a frame buffer driver which is a sufficient fall back solution to run the lightweight desktop environment [Xfce](https://xfce.org/). Let's start by installing it:
+Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
+* mrvl/bt_init_cfg.conf
+* mrvl/SDIO8777_SDIO_SDIO.bin
+* mrvl/txpwrlimit_cfg.bin
+* mrvl/sd8777_uapsta.bin
+* mrvl/WlanCalData_ext.conf
+* mrvl/bt_cal_data.conf
+* mrvl/txbackoff.txt
+* mrvl/txpower_FC.bin
+* mrvl/reg_alpha2
+* ispfw_v325.bin
+
+The command *wifi_on* and *wifi_off* control the Wi-Fi power state.
+
+To use Wi-Fi in sation mode from the command line, uncomment the lines related to *wlan0* in */etc/network/interfaces* and set the *wpa-ssid* and *wpa-psk* for your network. Then to bring it up with:
 
 ```
-$ apt install xfce4 lightdm
+$ ifup wlan0
 ```
 
-Stride / pitch issues can be fixed with fbset:
+From a graphic environment, *wlan0* will be picked by the *NetworkManager* (see below).
+
+### Display with Xorg
+
+The frame buffer device and console support is enabled in the kernel, which is how the login prompt is visible. It also offers good enough performances to run [Xorg](https://www.x.org) with the frame buffer driver as a fall back solution.
+
+The issue with incorrect stride / pitch as well as pixel format can be solved by running *fbset*:
 
 ```
-$ fbset -xres 536 -yres 960
+$ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
 ```
 
-To execute it whenever LightDM starts, add it to */lib/systemd/system/lightdm.service*:
-
-```
-...
-ExecStart=/usr/sbin/lightdm
-ExecStartPost=/bin/fbset -xres 536 -yres 960
-Restart=always
-...
-```
-
-The LightDM login screen appears and the pointer can be controller with the touchscreen:
-
-![](doc/images/debian_buster_lightdm_portrait_login.png)
-
-To switch to landscape orientation, create the file */etc/X11/xorg.conf* with:
+To switch Xorg to [landscape orientation](https://www.x.org/archive/X11R6.8.1/doc/fbdev.4.html), create the file */etc/X11/xorg.conf* with:
 
 ```
 Section "Device"  
@@ -250,9 +236,21 @@ Section "Device"
 EndSection
 ```
 
-![](doc/images/debian_buster_lightdm_landscape_login.png)
+## Use cases
 
-To auto-login and start directly to the Xfce desktop, set the following in */etc/lightdm/lightdm.conf*:
+### Xfce4 desktop
+
+The [Xfce](https://xfce.org/) lightweight desktop environment and [LightDM](https://github.com/canonical/lightdm) are installed with:
+
+```
+$ apt install xfce4 lightdm
+```
+
+The LightDM login screen appears and the pointer can be controlled with the touchscreen:
+
+![](doc/images/debian_buster_lightdm_portrait_login.png)
+
+To auto-login and start directly to the desktop, set the following in */etc/lightdm/lightdm.conf*:
 
 ```
 [SeatDefaults]
@@ -262,28 +260,29 @@ autologin-user=deb
 
 ![](doc/images/debian_buster_xfce4_desktop.png)
 
-## Gnome desktop
+### Gnome desktop
+
+The [Gnome](https://www.gnome.org/) desktop environment is installed with:
 
 ```
 $ apt install gnome-core
 ```
 
-*/usr/lib/systemd/system/gdm3.service*
+The GDM login screen appears and the pointer can be controlled with the touchscreen:
+
+
+
+To auto-login and start directly to the desktop, set the following in */etc/gdm3/daemon.conf*:
 
 ```
 ...
-[Service]
-ExecStartPre=/usr/share/gdm/generate-config
-ExecStart=/usr/sbin/gdm3
-ExecStartPost=/bin/fbset -xres 536 -yres 960
+# Enabling automatic login
+AutomaticLoginEnable = true
+AutomaticLogin = deb
 ...
 ```
 
-```
-$ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
-```
-
-## Telegram
+### Telegram
 
 The following will install the [Telegram](https://telegram.org/) desktop client and [Florence](http://florence.sourceforge.net/english/index.html) as virtual keyboard to type messages with the touchscreen:
 
