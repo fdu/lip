@@ -221,7 +221,7 @@ The frame buffer device and console support is enabled in the kernel, which is h
 
 The command *display_on* and *display_off* control the display power state.
 
-The issue with incorrect stride / pitch as well as pixel format can be solved by running *fbset*:
+The issue with incorrect stride / pitch as well as pixel format can be solved by running *fbset*, see */usr/bin/fbset-fix-stride*:
 
 ```
 $ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
@@ -282,6 +282,19 @@ To auto-login and start directly to the desktop, set the following in */etc/gdm3
 AutomaticLoginEnable = true
 AutomaticLogin = deb
 ...
+```
+
+To have trigger *fbset* when the session opens, create *.config/autostart/fbset.desktop* with:
+
+```
+[Desktop Entry]
+Name=fbset-fix-stride
+GenericName=fbset-fix-stride
+Comment=
+Exec=/usr/bin/fbset-fix-stride
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
 ```
 
 ![](doc/images/debian_buster_gnome_notifications.png)
