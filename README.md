@@ -284,7 +284,7 @@ AutomaticLogin = deb
 ...
 ```
 
-To have trigger *fbset* when the session opens, create *.config/autostart/fbset.desktop* with:
+To trigger *fbset* when the session opens, create *.config/autostart/fbset.desktop* with:
 
 ```
 [Desktop Entry]
