@@ -17,11 +17,11 @@ $ git clone https://github.com/fdu/lip.git
 $ cd lip
 ```
 
-The build process can run natively or from within a Docker container. This is optional but solves the build environment issues. Afterwards, the build instructions themselves are identical. If you wish to build from a Docker container, run:
+The build process can run natively or from within a Docker container. This is optional but solves the build environment issues. Afterwards, the build instructions themselves are identical. If you wish to build from a Docker container (tested on a Debian buster host), run:
 
 ```
 $ docker build -t lip-builder src/docker/lip-builder/
-$ docker run -it --rm -v `pwd`:`pwd` lip-builder sh -c "cd `pwd` && bash"
+$ docker run -it --rm -v `pwd`:`pwd` --cap-add=sys_admin --security-opt label:disable lip-builder sh -c "cd `pwd` && bash"
 ```
 
 Now we are ready to build the system images:

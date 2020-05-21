@@ -10,10 +10,9 @@ RUN apt install -y \
 	file \
 	cpio \
 	rsync \
-	unzip
-RUN apt install -y \
-	python3
-RUN apt install -y \
+	unzip \
+	python3 \
 	debootstrap \
 	qemu-user \
-	qemu-user-static
+	qemu-user-static \
+	nano
