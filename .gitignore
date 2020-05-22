@@ -2,5 +2,5 @@ output
 work
 src/overlay/ramfs/lib/firmware
 src/overlay/ramfs/etc/wpa_supplicant.conf
-src/overlay/sdcard/root/.ssh/
-src/overlay/sdcard/lib/firmware/
+src/overlay/rootfs/root/.ssh/
+src/overlay/rootfs/lib/firmware/

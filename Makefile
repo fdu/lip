@@ -5,9 +5,8 @@ dir_downloads = $(dir_work)/downloads
 dir_buildroot = $(dir_work)/buildroot
 dir_configs = $(dir_src)/configs
 dir_patches = $(dir_src)/patches
-dir_kernel_sdcard = $(dir_work)/kernel_sdcard
-dir_rootfs_sdcard = $(dir_work)/rootfs_sdcard
-dir_kernel_ramfs = $(dir_work)/kernel_ramfs
+dir_kernel = $(dir_work)/kernel
+dir_rootfs = $(dir_work)/rootfs
 dir_kernel_toolchain = $(dir_work)/kernel_toolchain
 archive_buildroot = buildroot.tar.gz
 url_buildroot = https://buildroot.org/downloads/buildroot-2020.02.tar.gz
@@ -17,67 +16,47 @@ revision_git_kernel = master
 KERNEL_ARCH=arm64
 KERNEL_CROSS_COMPILE=PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.8/aarch64-linux-android-
 
-all: rootfs_sdcard recovery_sdcard
+all: recovery rootfs
 	
 
-rootfs_sdcard:
-	mkdir -p $(dir_rootfs_sdcard)
-	mkdir -p $(dir_output)/sdcard
+rootfs:
+	mkdir -p $(dir_rootfs)
 	@which qemu-debootstrap || echo "qemu-debootstrap not found in path, this will probably fail"
 	qemu-debootstrap \
 		--arch=armhf \
 		--include=net-tools,openssh-server,wpasupplicant \
 		buster \
-		$(dir_rootfs_sdcard) \
+		$(dir_rootfs) \
 		http://ftp.debian.org/debian
-	cp -r $(dir_src)/overlay/sdcard/* $(dir_rootfs_sdcard)/
-	cd $(dir_rootfs_sdcard) && tar zcf ../../$(dir_output)/sdcard/rootfs.tar.gz *
+	cp -r $(dir_src)/overlay/rootfs/* $(dir_rootfs)/
+	cd $(dir_rootfs) && tar zcf ../../$(dir_output)/rootfs.tar.gz *
 
-recovery_sdcard: $(dir_output)/sdcard/recovery.img.tar
+recovery: $(dir_output)/recovery.img.tar
 	
 
-recovery_ramfs: $(dir_output)/ramfs/recovery.img.tar
-	
-
-$(dir_output)/sdcard/recovery.img.tar: $(dir_output)/sdcard/recovery.img
-	tar cvf $(dir_output)/sdcard/recovery.img.tar \
-		-C $(dir_output)/sdcard \
+$(dir_output)/recovery.img.tar: $(dir_work)/recovery.img
+	tar cvf $(dir_output)/recovery.img.tar \
+		-C $(dir_work) \
 		recovery.img
 
-$(dir_output)/ramfs/recovery.img.tar: $(dir_output)/ramfs/recovery.img
-	tar cvf $(dir_output)/ramfs/recovery.img.tar \
-		-C $(dir_output)/ramfs \
-		recovery.img
-
-$(dir_output)/sdcard/recovery.img: $(dir_kernel_sdcard)/arch/arm64/boot/uImage $(dir_output)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
-	mkdir -p $(dir_output)/sdcard
+$(dir_work)/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
 	$(dir_buildroot)/output/host/bin/mkbootimg \
-		--kernel $(dir_kernel_sdcard)/arch/arm64/boot/uImage \
+		--kernel $(dir_kernel)/arch/arm64/boot/uImage \
 		--ramdisk $(dir_buildroot)/output/images/rootfs.cpio.gz \
 		--base 0x10000000 \
 		--pagesize 2048 \
-		--dt $(dir_output)/dt.img \
-		--output $(dir_output)/sdcard/recovery.img
+		--dt $(dir_work)/dt.img \
+		--output $(dir_work)/recovery.img
 
-$(dir_output)/ramfs/recovery.img: $(dir_kernel_ramfs)/arch/arm64/boot/uImage $(dir_output)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
-	mkdir -p $(dir_output)/ramfs
-	$(dir_buildroot)/output/host/bin/mkbootimg \
-		--kernel $(dir_kernel_ramfs)/arch/arm64/boot/uImage \
-		--ramdisk $(dir_buildroot)/output/images/rootfs.cpio.gz \
-		--base 0x10000000 \
-		--pagesize 2048 \
-		--dt $(dir_output)/dt.img \
-		--output $(dir_output)/ramfs/recovery.img
-
-$(dir_output)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel_ramfs)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb $(dir_kernel_ramfs)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb
+$(dir_work)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb
 	mkdir -p $(dir_output)
 	$(dir_buildroot)/output/host/bin/dtbtool \
-		-o $(dir_output)/dt.img \
-		-p $(dir_kernel_ramfs)/scripts/dtc/ \
+		-o $(dir_work)/dt.img \
+		-p $(dir_kernel)/scripts/dtc/ \
 		-s 2048 \
-		$(dir_kernel_ramfs)/arch/arm64/boot/dts/
+		$(dir_kernel)/arch/arm64/boot/dts/
 
-$(dir_kernel_sdcard)/arch/arm64/boot/uImage: $(dir_kernel_sdcard)/arch/arm64/boot/Image.gz $(dir_buildroot)/output/host/bin/mkimage
+$(dir_kernel)/arch/arm64/boot/uImage: $(dir_kernel)/arch/arm64/boot/Image.gz $(dir_buildroot)/output/host/bin/mkimage
 	$(dir_buildroot)/output/host/bin/mkimage \
         -A arm64 \
         -O linux \
@@ -85,39 +64,23 @@ $(dir_kernel_sdcard)/arch/arm64/boot/uImage: $(dir_kernel_sdcard)/arch/arm64/boo
         -C gzip \
         -a 01000000 \
         -e 01000000 \
-        -d $(dir_kernel_sdcard)/arch/arm64/boot/Image.gz \
-        $(dir_kernel_sdcard)/arch/arm64/boot/uImage
+        -d $(dir_kernel)/arch/arm64/boot/Image.gz \
+        $(dir_kernel)/arch/arm64/boot/uImage
 
-$(dir_kernel_ramfs)/arch/arm64/boot/uImage: $(dir_kernel_ramfs)/arch/arm64/boot/Image.gz $(dir_buildroot)/output/host/bin/mkimage
-	$(dir_buildroot)/output/host/bin/mkimage \
-        -A arm64 \
-        -O linux \
-        -T kernel \
-        -C gzip \
-        -a 01000000 \
-        -e 01000000 \
-        -d $(dir_kernel_ramfs)/arch/arm64/boot/Image.gz \
-        $(dir_kernel_ramfs)/arch/arm64/boot/uImage
-
-$(dir_kernel_sdcard)/arch/arm64/boot/Image.gz: kernel_toolchain_link $(dir_kernel_sdcard) $(dir_kernel_sdcard)/.config
+$(dir_kernel)/arch/arm64/boot/Image.gz: kernel_toolchain_link $(dir_kernel) $(dir_kernel)/.config
 	export ARCH=$(KERNEL_ARCH)
 	export CROSS_COMPILE=$(KERNEL_CROSS_COMPILE)
-	$(MAKE) -j`nproc` -C $(dir_kernel_sdcard)
+	$(MAKE) -j`nproc` -C $(dir_kernel)
 
-$(dir_kernel_ramfs)/arch/arm64/boot/Image.gz: kernel_toolchain_link $(dir_kernel_ramfs) $(dir_kernel_ramfs)/.config
+$(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb: kernel_toolchain_link $(dir_kernel) $(dir_kernel)/.config
 	export ARCH=$(KERNEL_ARCH)
 	export CROSS_COMPILE=$(KERNEL_CROSS_COMPILE)
-	$(MAKE) -j`nproc` -C $(dir_kernel_ramfs)
+	$(MAKE) -j`nproc` -C $(dir_kernel) dtbs
 
-$(dir_kernel_ramfs)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb: kernel_toolchain_link $(dir_kernel_ramfs) $(dir_kernel_ramfs)/.config
+$(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb: kernel_toolchain_link $(dir_kernel) $(dir_kernel)/.config
 	export ARCH=$(KERNEL_ARCH)
 	export CROSS_COMPILE=$(KERNEL_CROSS_COMPILE)
-	$(MAKE) -j`nproc` -C $(dir_kernel_ramfs) dtbs
-
-$(dir_kernel_ramfs)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb: kernel_toolchain_link $(dir_kernel_ramfs) $(dir_kernel_ramfs)/.config
-	export ARCH=$(KERNEL_ARCH)
-	export CROSS_COMPILE=$(KERNEL_CROSS_COMPILE)
-	$(MAKE) -j`nproc` -C $(dir_kernel_ramfs) dtbs
+	$(MAKE) -j`nproc` -C $(dir_kernel) dtbs
 
 kernel_toolchain_link: $(dir_kernel_toolchain)
 	mkdir -p $(dir_work)/PLATFORM/prebuilts/gcc/linux-x86/aarch64
@@ -126,17 +89,11 @@ kernel_toolchain_link: $(dir_kernel_toolchain)
 $(dir_kernel_toolchain):
 	git clone $(url_kernel_toolchain) $(dir_kernel_toolchain)
 
-$(dir_kernel_sdcard):
-	git clone $(url_kernel) $(dir_kernel_sdcard) -b $(revision_git_kernel)
+$(dir_kernel):
+	git clone $(url_kernel) $(dir_kernel) -b $(revision_git_kernel)
 
-$(dir_kernel_ramfs):
-	git clone $(url_kernel) $(dir_kernel_ramfs) -b $(revision_git_kernel)
-
-$(dir_kernel_sdcard)/.config:
-	ln -sf `pwd`/$(dir_configs)/kernel_sdcard $(dir_kernel_sdcard)/.config
-
-$(dir_kernel_ramfs)/.config:
-	ln -sf `pwd`/$(dir_configs)/kernel_ramfs $(dir_kernel_ramfs)/.config
+$(dir_kernel)/.config:
+	ln -sf `pwd`/$(dir_configs)/kernel $(dir_kernel)/.config
 
 $(dir_buildroot)/output/host/bin/dtbtool: buildroot
 	
