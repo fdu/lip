@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sleep 10
+sudo fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
