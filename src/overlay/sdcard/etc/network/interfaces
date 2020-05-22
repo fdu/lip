@@ -13,5 +13,7 @@ iface rndis0 inet static
 
 #allow-hotplug wlan0
 #auto wlan0
-iface wlan0 inet dhcp
-  pre-up /usr/bin/wifi_on
+#iface wlan0 inet dhcp
+#  pre-up /usr/bin/wifi_on
+#  wpa-ssid YOUR_SSID
+#  wpa-psk YOUR_PSK
