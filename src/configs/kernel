@@ -348,7 +348,7 @@ CONFIG_SETEND_EMULATION=y
 #
 # Boot options
 #
-CONFIG_CMDLINE="ddr_mode=1 rw crashkernel=4k@0x08FFEC00 RDCA=0x08FFFC00 recovery_mode=1 uart_swc_en=0 quiet androidboot.emmc_checksum=3 board_id=0x01 androidboot.simslotcount=0 androidboot.lcd=1080_50 lcd_id=0x0053b810 active_voltage=4235 sleep_voltage=4325 androidboot.warranty_bit=1 loglevel=0 rootwait root=/dev/mmcblk1p1 fbcon=rotate:1"
+CONFIG_CMDLINE="ddr_mode=1 rw crashkernel=4k@0x08FFEC00 RDCA=0x08FFFC00 recovery_mode=1 uart_swc_en=0 quiet androidboot.emmc_checksum=3 board_id=0x01 androidboot.simslotcount=0 androidboot.lcd=1080_50 lcd_id=0x0053b810 active_voltage=4235 sleep_voltage=4325 androidboot.warranty_bit=1 loglevel=1 initrd=0x4b00000,5120K rdinit=/custom-init.sh"
 # CONFIG_CMDLINE_FROM_BOOTLOADER is not set
 # CONFIG_CMDLINE_EXTEND is not set
 CONFIG_CMDLINE_FORCE=y
@@ -789,6 +789,7 @@ CONFIG_LLC=y
 # CONFIG_LAPB is not set
 # CONFIG_PHONET is not set
 # CONFIG_IEEE802154 is not set
+CONFIG_6LOWPAN_IPHC=y
 CONFIG_NET_SCHED=y
 
 #
@@ -880,7 +881,29 @@ CONFIG_NET_FLOW_LIMIT=y
 # CONFIG_HAMRADIO is not set
 # CONFIG_CAN is not set
 # CONFIG_IRDA is not set
-# CONFIG_BT is not set
+CONFIG_BT=y
+# CONFIG_BT_RFCOMM is not set
+# CONFIG_BT_BNEP is not set
+# CONFIG_BT_HIDP is not set
+
+#
+# Bluetooth device drivers
+#
+CONFIG_BT_HCIBTUSB=y
+CONFIG_BT_HCIBTSDIO=y
+CONFIG_BT_HCIUART=y
+CONFIG_BT_HCIUART_H4=y
+CONFIG_BT_HCIUART_BCSP=y
+CONFIG_BT_HCIUART_ATH3K=y
+CONFIG_BT_HCIUART_LL=y
+CONFIG_BT_HCIUART_3WIRE=y
+CONFIG_BT_HCIBCM203X=y
+CONFIG_BT_HCIBPA10X=y
+# CONFIG_BT_HCIBFUSB is not set
+CONFIG_BT_HCIVHCI=y
+CONFIG_BT_MRVL=y
+CONFIG_BT_MRVL_SDIO=y
+# CONFIG_BT_ATH3K is not set
 # CONFIG_AF_RXRPC is not set
 CONFIG_FIB_RULES=y
 CONFIG_WIRELESS=y

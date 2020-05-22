@@ -9,7 +9,13 @@ input_event_struct = "llHHI"
 input_event_device = "/dev/input/event5"
 text_selected = "\\e[1;33m"
 text_normal = "\\e[0m"
-menu_entries = ["shell", "wlan0 STA and display off", "wlan0 AP and display off"]
+menu_entries = [
+  ["Shell", "shell"],
+  ["RAM disk (Busybox init)", "ramdisk"],
+  ["External SD card (/dev/mmcblk1p1)", "/dev/mmcblk1p1"],
+  ["Interal eMMC (/dev/mmcblk0p16 SYSTEM)", "/dev/mmcblk0p16"],
+  ["Interal eMMC (/dev/mmcblk0p19 USER)", "/dev/mmcblk0p19"],
+]
 menu_index = 0
 button_code_home = 172
 button_code_up = 115
@@ -35,19 +41,14 @@ def display():
   print()
   for i in range(len(menu_entries)):
     if i == menu_index:
-      print_selected("  -> " + menu_entries[i])
+      print_selected("  -> " + menu_entries[i][0])
     else:
-      print("  -> " + menu_entries[i])
+      print("  -> " + menu_entries[i][0])
 
 def execute(action):
-  if action == 0:
-    print("Going to shell...")
-  elif action == 1:
-    os.system("display_off")
-    os.system("ifup wlan0")
-  elif action == 2:
-    os.system("display_off")
-    os.system("access_point_on")
+  file = open("/tmp/bootchoice", "w")
+  file.write(menu_entries[action][1])
+  file.close()
   os.system("reset")
   sys.exit(0)
 
