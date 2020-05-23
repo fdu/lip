@@ -31,22 +31,28 @@ rootfs:
 	cp -r $(dir_src)/overlay/rootfs/* $(dir_rootfs)/
 	cd $(dir_rootfs) && tar zcf ../../$(dir_output)/rootfs.tar.gz *
 
+flash_recovery: $(dir_output)/recovery.img
+	heimdall \
+		flash \
+		--RECOVERY \
+		$(dir_output)/recovery.img
+
 recovery: $(dir_output)/recovery.img.tar
 	
 
-$(dir_output)/recovery.img.tar: $(dir_work)/recovery.img
+$(dir_output)/recovery.img.tar: $(dir_output)/recovery.img
 	tar cvf $(dir_output)/recovery.img.tar \
-		-C $(dir_work) \
+		-C $(dir_output) \
 		recovery.img
 
-$(dir_work)/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
+$(dir_output)/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
 	$(dir_buildroot)/output/host/bin/mkbootimg \
 		--kernel $(dir_kernel)/arch/arm64/boot/uImage \
 		--ramdisk $(dir_buildroot)/output/images/rootfs.cpio.gz \
 		--base 0x10000000 \
 		--pagesize 2048 \
 		--dt $(dir_work)/dt.img \
-		--output $(dir_work)/recovery.img
+		--output $(dir_output)/recovery.img
 
 $(dir_work)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb
 	mkdir -p $(dir_output)

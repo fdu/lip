@@ -1,6 +1,9 @@
 #!/bin/sh
 
 mount -t devtmpfs devtmpfs /dev
+mount -t proc /proc
+echo 0 > /proc/sys/kernel/hung_task_timeout_secs
+umount /proc
 
 /bootmenu.py
 bootchoice=`cat /tmp/bootchoice`

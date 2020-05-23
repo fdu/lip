@@ -12,9 +12,10 @@ text_normal = "\\e[0m"
 menu_entries = [
   ["Shell", "shell"],
   ["RAM disk (Busybox init)", "ramdisk"],
-  ["External SD card (/dev/mmcblk1p1)", "/dev/mmcblk1p1"],
-  ["Interal eMMC (/dev/mmcblk0p16 SYSTEM)", "/dev/mmcblk0p16"],
-  ["Interal eMMC (/dev/mmcblk0p19 USER)", "/dev/mmcblk0p19"],
+  ["External SD card partition 1", "/dev/mmcblk1p1"],
+  ["External SD card partition 2", "/dev/mmcblk1p2"],
+  ["Interal eMMC partition 16 (SYSTEM)", "/dev/mmcblk0p16"],
+  ["Interal eMMC partition 19 (USER)", "/dev/mmcblk0p19"],
 ]
 menu_index = 0
 button_code_home = 172
