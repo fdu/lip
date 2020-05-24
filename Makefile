@@ -20,7 +20,7 @@ all: recovery rootfs
 	
 
 rootfs:
-	mkdir -p $(dir_rootfs)
+	mkdir -p $(dir_rootfs) $(dir_output)
 	@which qemu-debootstrap || echo "qemu-debootstrap not found in path, this will probably fail"
 	qemu-debootstrap \
 		--arch=armhf \

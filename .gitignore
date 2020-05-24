@@ -3,4 +3,4 @@ work
 src/overlay/ramfs/lib/firmware
 src/overlay/ramfs/etc/wpa_supplicant.conf
 src/overlay/rootfs/root/.ssh/
-src/overlay/rootfs/lib/firmware/
+src/overlay/rootfs/usr/lib/firmware/
