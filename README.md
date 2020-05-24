@@ -314,7 +314,7 @@ Type=Application
 X-GNOME-Autostart-enabled=true
 ```
 
-In the settings, select *Dock to screen edge*.
+In the *onboard* settings, select *Dock to screen edge*.
 
 ### Telegram
 
