@@ -301,12 +301,27 @@ X-GNOME-Autostart-enabled=true
 
 ![](doc/images/debian_buster_gnome_activities.png)
 
-### Telegram
-
-The following will install the [Telegram](https://telegram.org/) desktop client and [Florence](http://florence.sourceforge.net/english/index.html) as virtual keyboard to type messages with the touchscreen:
+To trigger display an on-screen keyboard with *onboard* when the session opens, create *.config/autostart/onboard.desktop* with:
 
 ```
-$ apt install florence telegram-desktop
+[Desktop Entry]
+Name=onboard
+GenericName=onboard
+Comment=
+Exec=onboard -s 540x200 -y 900
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+```
+
+In the *onboard* settings, select *Dock to screen edge*.
+
+### Telegram
+
+The following will install the [Telegram](https://telegram.org/) desktop client and *onboard* as on-screen keyboard to type messages with the touchscreen:
+
+```
+$ apt install onboard telegram-desktop
 ```
 
 ![](doc/images/debian_buster_telegram.png)
