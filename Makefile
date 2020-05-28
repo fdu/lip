@@ -19,13 +19,20 @@ KERNEL_CROSS_COMPILE=PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-andr
 all: recovery rootfs
 	
 
-rootfs: $(dir_output)/rootfs.img $(dir_output)/rootfs.tar.gz
+rootfs: $(dir_output)/heimdall/rootfs.img $(dir_work)/rootfs.tar.gz
 	
 
-recovery: $(dir_output)/recovery.img $(dir_output)/recovery.img.tar
+recovery: $(dir_output)/heimdall/recovery.img $(dir_output)/odin/recovery.img.tar
 	
 
-$(dir_output)/rootfs.img: $(dir_work)/rootfs.ext4 $(dir_work)/android_img_repack_tools/img2simg
+flash: $(dir_output)/heimdall/rootfs.img $(dir_output)/heimdall/recovery.img
+	heimdall \
+		flash \
+		--SYSTEM $(dir_output)/rootfs.img \
+		--RECOVERY $(dir_output)/recovery.img
+
+$(dir_output)/heimdall/rootfs.img: $(dir_work)/rootfs.ext4 $(dir_work)/android_img_repack_tools/img2simg
+	mkdir -p $(dir_output)/heimdall
 	./$(dir_work)/android_img_repack_tools/img2simg $< $@
 
 $(dir_work)/android_img_repack_tools/img2simg:
@@ -41,7 +48,7 @@ $(dir_work)/android_img_repack_tools/img2simg:
 	sed -i s/gcc-5/gcc/ $(dir_work)/android_img_repack_tools/Makefile
 	cd $(dir_work)/android_img_repack_tools && make img2simg
 
-$(dir_work)/rootfs.ext4: $(dir_output)/rootfs.tar.gz
+$(dir_work)/rootfs.ext4: $(dir_output)/sdcard/rootfs.tar.gz
 	truncate -s 512M $@
 	mkfs.ext4 -F $@
 	$(eval MOUNT_DIR=$(shell mktemp -d))
@@ -51,8 +58,8 @@ $(dir_work)/rootfs.ext4: $(dir_output)/rootfs.tar.gz
 	rmdir $(MOUNT_DIR)
 	resize2fs -M $@
 
-$(dir_output)/rootfs.tar.gz:
-	mkdir -p $(dir_rootfs) $(dir_output)
+$(dir_output)/sdcard/rootfs.tar.gz:
+	mkdir -p $(dir_rootfs) $(dir_output)/sdcard
 	@which qemu-debootstrap || echo "qemu-debootstrap not found in path, this will probably fail"
 	qemu-debootstrap \
 		--arch=armhf \
@@ -61,33 +68,23 @@ $(dir_output)/rootfs.tar.gz:
 		$(dir_rootfs) \
 		http://ftp.debian.org/debian
 	cp -r $(dir_src)/overlay/rootfs/* $(dir_rootfs)/
-	cd $(dir_rootfs) && tar zcf ../../$(dir_output)/rootfs.tar.gz *
+	cd $(dir_rootfs) && tar zcf ../../$(dir_output)/sdcard/rootfs.tar.gz *
 
-flash_rootfs: $(dir_output)/rootfs.img
-	heimdall \
-		flash \
-		--SYSTEM \
-		$<
-
-flash_recovery: $(dir_output)/recovery.img
-	heimdall \
-		flash \
-		--RECOVERY \
-		$<
-
-$(dir_output)/recovery.img.tar: $(dir_output)/recovery.img
+$(dir_output)/odin/recovery.img.tar: $(dir_output)/heimdall/recovery.img
+	mkdir -p $(dir_output)/odin
 	tar cvf $@ \
-		-C $(dir_output) \
+		-C $(dir_output)/heimdall \
 		recovery.img
 
-$(dir_output)/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
+$(dir_output)/heimdall/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.img $(dir_buildroot)/output/images/rootfs.cpio.gz $(dir_buildroot)/output/host/bin/mkbootimg
+	mkdir -p $(dir_output)/heimdall
 	$(dir_buildroot)/output/host/bin/mkbootimg \
 		--kernel $(dir_kernel)/arch/arm64/boot/uImage \
 		--ramdisk $(dir_buildroot)/output/images/rootfs.cpio.gz \
 		--base 0x10000000 \
 		--pagesize 2048 \
 		--dt $(dir_work)/dt.img \
-		--output $<
+		--output $@
 
 $(dir_work)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb
 	mkdir -p $(dir_output)
