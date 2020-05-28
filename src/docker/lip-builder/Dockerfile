@@ -15,4 +15,7 @@ RUN apt install -y \
 	debootstrap \
 	qemu-user \
 	qemu-user-static \
-	nano
+	nano \
+	libpcre3-dev \
+	libz-dev \
+	automake

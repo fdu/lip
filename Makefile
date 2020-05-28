@@ -19,7 +19,39 @@ KERNEL_CROSS_COMPILE=PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-andr
 all: recovery rootfs
 	
 
-rootfs:
+rootfs: $(dir_output)/rootfs.img $(dir_output)/rootfs.tar.gz
+	
+
+recovery: $(dir_output)/recovery.img $(dir_output)/recovery.img.tar
+	
+
+$(dir_output)/rootfs.img: $(dir_work)/rootfs.ext4 $(dir_work)/android_img_repack_tools/img2simg
+	./$(dir_work)/android_img_repack_tools/img2simg $< $@
+
+$(dir_work)/android_img_repack_tools/img2simg:
+	git clone \
+		-b android-6.0.1 \
+		https://github.com/ASdev/android_img_repack_tools \
+		$(dir_work)/android_img_repack_tools
+	cd $(dir_work)/android_img_repack_tools
+	curl https://gist.githubusercontent.com/jedld/4f388496bda03b349f5744f367749a67/raw/47c9ac922e1c30e78d82ffa86232dc78e4f5e910/gistfile1.txt > $(dir_work)/android_img_repack_tools/patch
+	cd $(dir_work)/android_img_repack_tools && ./configure
+	cd $(dir_work)/android_img_repack_tools/core && patch -p1 < ../patch
+	cd $(dir_work)/android_img_repack_tools/external/android_system_core && patch -p1 < ../../patch
+	sed -i s/gcc-5/gcc/ $(dir_work)/android_img_repack_tools/Makefile
+	cd $(dir_work)/android_img_repack_tools && make img2simg
+
+$(dir_work)/rootfs.ext4: $(dir_output)/rootfs.tar.gz
+	truncate -s 512M $@
+	mkfs.ext4 -F $@
+	$(eval MOUNT_DIR=$(shell mktemp -d))
+	mount $@ $(MOUNT_DIR)
+	tar zxf $< -C $(MOUNT_DIR)
+	umount $(MOUNT_DIR)
+	rmdir $(MOUNT_DIR)
+	resize2fs -M $@
+
+$(dir_output)/rootfs.tar.gz:
 	mkdir -p $(dir_rootfs) $(dir_output)
 	@which qemu-debootstrap || echo "qemu-debootstrap not found in path, this will probably fail"
 	qemu-debootstrap \
@@ -31,17 +63,20 @@ rootfs:
 	cp -r $(dir_src)/overlay/rootfs/* $(dir_rootfs)/
 	cd $(dir_rootfs) && tar zcf ../../$(dir_output)/rootfs.tar.gz *
 
+flash_rootfs: $(dir_output)/rootfs.img
+	heimdall \
+		flash \
+		--SYSTEM \
+		$<
+
 flash_recovery: $(dir_output)/recovery.img
 	heimdall \
 		flash \
 		--RECOVERY \
-		$(dir_output)/recovery.img
-
-recovery: $(dir_output)/recovery.img.tar
-	
+		$<
 
 $(dir_output)/recovery.img.tar: $(dir_output)/recovery.img
-	tar cvf $(dir_output)/recovery.img.tar \
+	tar cvf $@ \
 		-C $(dir_output) \
 		recovery.img
 
@@ -52,7 +87,7 @@ $(dir_output)/recovery.img: $(dir_kernel)/arch/arm64/boot/uImage $(dir_work)/dt.
 		--base 0x10000000 \
 		--pagesize 2048 \
 		--dt $(dir_work)/dt.img \
-		--output $(dir_output)/recovery.img
+		--output $<
 
 $(dir_work)/dt.img: $(dir_buildroot)/output/host/bin/dtbtool $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-00.dtb $(dir_kernel)/arch/arm64/boot/dts/pxa1908-grandprimevelte-01.dtb
 	mkdir -p $(dir_output)
@@ -70,8 +105,8 @@ $(dir_kernel)/arch/arm64/boot/uImage: $(dir_kernel)/arch/arm64/boot/Image.gz $(d
         -C gzip \
         -a 01000000 \
         -e 01000000 \
-        -d $(dir_kernel)/arch/arm64/boot/Image.gz \
-        $(dir_kernel)/arch/arm64/boot/uImage
+        -d $< \
+        $@
 
 $(dir_kernel)/arch/arm64/boot/Image.gz: kernel_toolchain_link $(dir_kernel) $(dir_kernel)/.config
 	export ARCH=$(KERNEL_ARCH)
@@ -99,7 +134,7 @@ $(dir_kernel):
 	git clone $(url_kernel) $(dir_kernel) -b $(revision_git_kernel)
 
 $(dir_kernel)/.config:
-	ln -sf `pwd`/$(dir_configs)/kernel $(dir_kernel)/.config
+	ln -sf `pwd`/$(dir_configs)/kernel $@
 
 $(dir_buildroot)/output/host/bin/dtbtool: buildroot
 	
@@ -118,17 +153,17 @@ buildroot: $(dir_buildroot) $(dir_buildroot)/.config
 
 $(dir_downloads)/$(archive_buildroot):
 	mkdir -p $(dir_downloads)
-	curl $(url_buildroot) > $(dir_downloads)/$(archive_buildroot)
+	curl $(url_buildroot) > $@
 	touch $@
 
 $(dir_buildroot): $(dir_downloads)/$(archive_buildroot)
-	mkdir -p $(dir_buildroot)
-	tar zxf $(dir_downloads)/$(archive_buildroot) -C $(dir_buildroot) --strip-components=1
+	mkdir -p $@
+	tar zxf $< -C $@ --strip-components=1
 	patch -p0 < $(dir_patches)/buildroot/0001-add-mkbootimg.patch
-	ln -sf `pwd`/$(dir_src)/packages/mkbootimg $(dir_buildroot)/package/
+	ln -sf `pwd`/$(dir_src)/packages/mkbootimg $@/package/
 
 $(dir_buildroot)/.config:
-	ln -sf `pwd`/$(dir_configs)/buildroot $(dir_buildroot)/.config
+	ln -sf `pwd`/$(dir_configs)/buildroot $@
 
 clean:
 	rm -rf $(dir_work) $(dir_output)
