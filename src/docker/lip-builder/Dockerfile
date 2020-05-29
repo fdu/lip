@@ -18,4 +18,5 @@ RUN apt install -y \
 	nano \
 	libpcre3-dev \
 	libz-dev \
-	automake
+	automake \
+	heimdall-flash

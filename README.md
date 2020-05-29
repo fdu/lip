@@ -21,7 +21,7 @@ The build process can run natively or from within a Docker container. This is op
 
 ```
 $ docker build -t lip-builder src/docker/lip-builder/
-$ docker run -it --rm -v `pwd`:`pwd` --cap-add=sys_admin --security-opt label:disable lip-builder sh -c "cd `pwd` && bash"
+$ docker run -it --rm -v `pwd`:`pwd` --privileged lip-builder sh -c "cd `pwd` && bash"
 ```
 
 Now we are ready to build the system images:

@@ -19,7 +19,7 @@ KERNEL_CROSS_COMPILE=PLATFORM/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-andr
 all: recovery rootfs
 	
 
-rootfs: $(dir_output)/heimdall/rootfs.img $(dir_work)/rootfs.tar.gz
+rootfs: $(dir_output)/heimdall/rootfs.img $(dir_output)/sdcard/rootfs.tar.gz
 	
 
 recovery: $(dir_output)/heimdall/recovery.img $(dir_output)/odin/recovery.img.tar
