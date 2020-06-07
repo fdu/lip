@@ -297,7 +297,7 @@ To trigger display an on-screen keyboard with *onboard* when the session opens, 
 Name=onboard
 GenericName=onboard
 Comment=
-Exec=onboard -s 540x200 -y 900
+Exec=onboard -s 540x200 -y 760 -x 0
 Terminal=false
 Type=Application
 X-GNOME-Autostart-enabled=true
