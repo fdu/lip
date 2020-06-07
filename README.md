@@ -227,17 +227,6 @@ The issue with incorrect stride / pitch as well as pixel format can be solved by
 $ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
 ```
 
-To switch Xorg to [landscape orientation](https://www.x.org/archive/X11R6.8.1/doc/fbdev.4.html), create the file */etc/X11/xorg.conf* with:
-
-```
-Section "Device"  
-  Identifier "fb"
-  Driver "fbdev"
-  Option "fbdev" "/dev/fb0"
-  Option "Rotate" "CW"
-EndSection
-```
-
 ## Use cases
 
 ### Xfce4 desktop
@@ -326,11 +315,11 @@ $ apt install onboard telegram-desktop
 
 ![](doc/images/debian_buster_telegram.png)
 
-## Tips and tricks
+# Tips and tricks
 
-### Frame buffer console rotation
+## Frame buffer console rotation
 
-Frame buffer console rotation is enabled at the kernel with fbcon. Value 0 means normal rotation, which is portrait mode on the phone, and value 1 means clockwise rotation, which is landscape mode on the phone. The value can be specified at boot time by adding to the kernel command line:
+Frame buffer console rotation is enabled at the kernel with *fbcon*. Value *0* means normal rotation, which is portrait mode on the phone, and value *1* means clockwise rotation, which is landscape mode on the phone. The value can be specified at boot time by adding to the kernel command line:
 
 ```
 fbcon=rotate:1
@@ -340,6 +329,19 @@ At runtime, this value can be set like this:
 
 ```
 echo 1 > /sys/class/graphics/fbcon/rotate
+```
+
+## Xorg (fbdev) orientation
+
+Per default Xorg with fbdev will render in portrait mode on the phone. To switch to [landscape mode](https://www.x.org/archive/X11R6.8.1/doc/fbdev.4.html), create the file */etc/X11/xorg.conf* with:
+
+```
+Section "Device"  
+  Identifier "fb"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb0"
+  Option "Rotate" "CW"
+EndSection
 ```
 
 # More pages
