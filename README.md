@@ -326,6 +326,22 @@ $ apt install onboard telegram-desktop
 
 ![](doc/images/debian_buster_telegram.png)
 
+## Tips and tricks
+
+### Frame buffer console rotation
+
+Frame buffer console rotation is enabled at the kernel with fbcon. Value 0 means normal rotation, which is portrait mode on the phone, and value 1 means clockwise rotation, which is landscape mode on the phone. The value can be specified at boot time by adding to the kernel command line:
+
+```
+fbcon=rotate:1
+```
+
+At runtime, this value can be set like this:
+
+```
+echo 1 > /sys/class/graphics/fbcon/rotate
+```
+
 # More pages
 
 * [Gallery](doc/Gallery.md)
