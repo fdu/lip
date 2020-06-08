@@ -317,7 +317,9 @@ $ apt install onboard telegram-desktop
 
 # Tips and tricks
 
-## Frame buffer console rotation
+## Display
+
+### Frame buffer console rotation
 
 Frame buffer console rotation is enabled at the kernel with *fbcon*. Value *0* means normal rotation, which is portrait mode on the phone, and value *1* means clockwise rotation, which is landscape mode on the phone. The value can be specified at boot time by adding to the kernel command line:
 
@@ -331,7 +333,15 @@ At runtime, this value can be set like this:
 echo 1 > /sys/class/graphics/fbcon/rotate
 ```
 
-## Xorg (fbdev) orientation
+### Pitch and frame buffer color format
+
+Per default, *Xorg* shows a stride effect and wrong colors due to incorrect frame buffer format. Thie can be fixed with *fbset*:
+
+```
+$ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
+```
+
+### Xorg (fbdev) orientation
 
 Per default Xorg with fbdev will render in portrait mode on the phone. To switch to [landscape mode](https://www.x.org/archive/X11R6.8.1/doc/fbdev.4.html), create the file */etc/X11/xorg.conf* with:
 
