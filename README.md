@@ -335,7 +335,7 @@ echo 1 > /sys/class/graphics/fbcon/rotate
 
 ### Pitch and frame buffer color format
 
-Per default, *Xorg* shows a stride effect and wrong colors due to incorrect frame buffer format. Thie can be fixed with *fbset*:
+Per default, *Xorg* shows a stride effect and wrong colors due to incorrect frame buffer format. This can be fixed with *fbset*:
 
 ```
 $ fbset -xres 536 -yres 960 -rgba 8/16,8/8,8/0,8/24
