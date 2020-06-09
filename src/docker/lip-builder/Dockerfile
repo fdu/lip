@@ -19,4 +19,5 @@ RUN apt install -y \
 	libpcre3-dev \
 	libz-dev \
 	automake \
-	heimdall-flash
+	heimdall-flash \
+	ncurses-dev
