@@ -1,10 +1,18 @@
-## Configure
+# System configuration
 
-### Console and SSH
+## Console login
 
-With [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) enabled, an USB keyboard can be connected to interact with the login prompt. This implies editing the */etc/shadow* file on the SD card from another machine beforehand, in order to set the root password.
+With an [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go) adapter, a USB keyboard can be used to enter login credentials. This implies setting the root password on the root file system in the */etc/shadow* file before flashing.
 
-Alternatively, this minimal Debian system run a SSH server. If connected to a USB host, a USB ethernet network adapter is brought up at boot with IP 192.168.234.2. By setting IP 192.168.234.1 on the host, the Debian smartphone answers to ping. Before connecting over SSH, either a user and password must be added in the SD card from another machine, or the public SSH key of the host must be copied to */root/.ssh/authorized_keys*.
+## Network
+
+### USB ethernet
+
+When connected to a host over USB, the USB ethernet network adapter is configured to take the IP address 192.168.234.2 statically. Connection can be established by using for example the IP address 192.168.234.1 on the host.
+
+### SSH
+
+The minimal Debian root file system runs [OpenSSH](https://www.openssh.com). Before connecting over SSH, either a user and password must be set (see above) or the public SSH key of the host must be copied to */root/.ssh/authorized_keys* of the root file system.
 
 ```
 $ ssh root@192.168.234.2
@@ -18,9 +26,29 @@ permitted by applicable law.
 root@grandprime:~#
 ```
 
-Welcome to Debian on your phone!
+### Wi-Fi
 
-By enabling IP forwarding and masquerading on the host, the phone can connect to internet, which will be needed to install more packages.
+Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/* before building the image, or to the running system under */lib/firmware/*. With the smartphone used as reference, those files are:
+* mrvl/bt_init_cfg.conf
+* mrvl/SDIO8777_SDIO_SDIO.bin
+* mrvl/txpwrlimit_cfg.bin
+* mrvl/sd8777_uapsta.bin
+* mrvl/WlanCalData_ext.conf
+* mrvl/bt_cal_data.conf
+* mrvl/txbackoff.txt
+* mrvl/txpower_FC.bin
+* mrvl/reg_alpha2
+* ispfw_v325.bin
+
+The command *wifi_on* and *wifi_off* control the Wi-Fi power state.
+
+To use Wi-Fi in sation mode from the command line, uncomment the lines related to *wlan0* in */etc/network/interfaces* and set the *wpa-ssid* and *wpa-psk* for your network. Then to bring it up with:
+
+```
+$ ifup wlan0
+```
+
+From a graphic environment, *wlan0* will be picked by the *NetworkManager* (see below).
 
 ### User permissions
 
@@ -148,30 +176,6 @@ Status: Downloaded newer image for busybox:latest
 BusyBox v1.31.1 (2020-04-13 23:06:12 UTC) multi-call binary.
 ...
 ```
-
-### Wi-Fi
-
-Wi-Fi requires binary firmware files. They must be extracted over from an original system or a backup and copied to *src/overlay/sdcard/lib/firmware/*. With the smartphone used as reference, those files are:
-* mrvl/bt_init_cfg.conf
-* mrvl/SDIO8777_SDIO_SDIO.bin
-* mrvl/txpwrlimit_cfg.bin
-* mrvl/sd8777_uapsta.bin
-* mrvl/WlanCalData_ext.conf
-* mrvl/bt_cal_data.conf
-* mrvl/txbackoff.txt
-* mrvl/txpower_FC.bin
-* mrvl/reg_alpha2
-* ispfw_v325.bin
-
-The command *wifi_on* and *wifi_off* control the Wi-Fi power state.
-
-To use Wi-Fi in sation mode from the command line, uncomment the lines related to *wlan0* in */etc/network/interfaces* and set the *wpa-ssid* and *wpa-psk* for your network. Then to bring it up with:
-
-```
-$ ifup wlan0
-```
-
-From a graphic environment, *wlan0* will be picked by the *NetworkManager* (see below).
 
 ### Display with Xorg
 
@@ -311,11 +315,3 @@ Section "Device"
   Option "Rotate" "CW"
 EndSection
 ```
-
-# More pages
-
-* [Gallery](doc/Gallery.md)
-* [Supported hardware](doc/Supported_hardware.md)
-* [Recovery image and Buildroot](doc/Recovery_and_Buildroot.md)
-* [Build a RAM-disk only system with Buildroot](doc/Recovery_image_Buildroot_RAM_disk.md)
-* [Build TWRP](doc/Build_TWRP.md)
