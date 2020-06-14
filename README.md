@@ -68,3 +68,13 @@ See how to configure the system in [system configuration](doc/System_configurati
 
 # Gallery
 
+Xfce4
+
+![](doc/images/debian_buster_xfce4_tiles.png)
+
+
+Gnome
+
+![](doc/images/debian_buster_gnome_tiles.png)
+
+More in the [gallery](doc/Gallery.md).
