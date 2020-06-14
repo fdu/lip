@@ -48,11 +48,21 @@ To boot the device in recovery mode, hold power, home and volume up. The Linux k
 
 * *Shell* drop to a shell immediately
 * *RAM disk (Busybox init)* hand over to Busybox system initialization provided in the RAM disk
-* *Internal eMMC partition (SYSTEM)* hand over to Debian by running Busybox switch_root to /sbin/inint on the system partition
+* *Internal eMMC partition (SYSTEM)* hand over to Debian by running Busybox *switch_root* to */sbin/init* on the system partition
+
+When Debian is booted, the following prompt appears:
+
+![](doc/images/debian_buster_console_login_small.png)
+
+Congratulations, Debian is running on your phone!
+
+This is only the beginning, see all what is now possible in the next section.
+
+## System configuration
 
 # Block diagram
 
-
+![](doc/images/block_diagram.png)
 
 ## Configure
 
