@@ -50,7 +50,9 @@ $ ifup wlan0
 
 From a graphic environment, *wlan0* will be picked by the *NetworkManager* (see below).
 
-### User permissions
+## Users and groups
+
+### Android groups
 
 The Android kernel with *CONFIG_ANDROID_PARANOID_NETWORK* requires users to be added to groups with predefined GIDs in order to access network. First let's create those groups:
 
@@ -67,6 +69,8 @@ Then add *root* to those groups:
 ```
 $ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin root
 ```
+
+### Normal user
 
 A normal user is added with:
 
@@ -87,13 +91,15 @@ Just like for *root*, this user needs to be added to the network permission grou
 $ usermod -aG aid_bt,aid_bt_net,aid_inet,aid_net_raw,aid_admin deb
 ```
 
-### Packages
+### apt user
 
 To install packages with *apt*, the user *_apt* needs some of the network permissions:
 
 ```
 $ usermod -G nogroup -g aid_inet _apt
 ```
+
+### sudo
 
 The system is now ready to install more software packages through network. For example to install *sudo*:
 
@@ -113,7 +119,7 @@ Finally, to allow *sudo* without password:
 $ echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
-### Docker
+## Docker
 
 The complete instructions to install [Docker](https://www.docker.com/) on Debian are [here](https://docs.docker.com/engine/install/debian/). In our case it is:
 
