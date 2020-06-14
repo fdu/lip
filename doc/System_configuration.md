@@ -231,7 +231,7 @@ $ apt install xfce4 lightdm
 
 The LightDM login screen appears and the pointer can be controlled with the touchscreen:
 
-![](doc/images/debian_buster_lightdm_portrait_login.png)
+![](images/debian_buster_lightdm_portrait_login.png)
 
 To auto-login and start directly to the desktop, set the following in */etc/lightdm/lightdm.conf*:
 
@@ -241,7 +241,7 @@ autologin-user=deb
 ...
 ```
 
-![](doc/images/debian_buster_xfce4_desktop.png)
+![](images/debian_buster_xfce4_desktop.png)
 
 ### Gnome
 
@@ -253,7 +253,7 @@ $ apt install gnome-core
 
 The GDM login screen appears and the pointer can be controlled with the touchscreen:
 
-![](doc/images/debian_buster_gdm_portrait_login.png)
+![](images/debian_buster_gdm_portrait_login.png)
 
 To auto-login and start directly to the desktop, set the following in */etc/gdm3/daemon.conf*:
 
@@ -278,9 +278,9 @@ Type=Application
 X-GNOME-Autostart-enabled=true
 ```
 
-![](doc/images/debian_buster_gnome_notifications.png)
+![](images/debian_buster_gnome_notifications.png)
 
-![](doc/images/debian_buster_gnome_activities.png)
+![](images/debian_buster_gnome_activities.png)
 
 To trigger display an on-screen keyboard with *onboard* when the session opens, create *.config/autostart/onboard.desktop* with:
 
@@ -305,5 +305,5 @@ The following will install the [Telegram](https://telegram.org/) desktop client 
 $ apt install onboard telegram-desktop
 ```
 
-![](doc/images/debian_buster_telegram.png)
+![](images/debian_buster_telegram.png)
 
