@@ -1,44 +1,58 @@
 # Linux in the pocket
 
-This project brings bare-metal Linux desktop and services to smartphones.
+Run [Debian Buster](https://www.debian.org/releases/buster/) on your smartphone!
 
-Plenty of smartphones are sadly lying around, waiting for a second life. Most of them provide enough resources to be recycled as mini computers. With a variety of sensors, cameras, microphones, they are great battery-powered maker devices. As smartphones often support USB OTG, even more peripherals to be added for desktop use. This is only possible with software that allows customization. This repository shows how to build such a system using existing free and open-source software on [supported hardware](doc/Supported_hardware.md). See the [gallery](doc/Gallery.md) for applications.
+This project provides a set of configuration files to build from scratch a complete Linux system for a smartphone, turning it into a mini battery-powered [single board computer](https://en.wikipedia.org/wiki/Single-board_computer) with plenty of sensors. Thanks to its display and [USB OTG](https://en.wikipedia.org/wiki/USB_On-The-Go), it can be used as a fully functional and customizable portable Debian system.
 
 ![](doc/images/desktop_on_smartphone.png)
 
-# Run Debian on your smartphone!
+# Quick start
 
-## Build images
+## Build the images
 
-The Makefile in this repository will take care of the whole build process, from fetching the source to compiling and assembling the system images. Let's start by getting the required files:
+The system images are built from the files in this repository. The first step is to get a copy of them:
 
 ```
 $ git clone https://github.com/fdu/lip.git
 $ cd lip
 ```
 
-The build process can run natively or from within a Docker container. This is optional but solves the build environment issues. Afterwards, the build instructions themselves are identical. If you wish to build from a Docker container (tested on a Debian buster host), run:
+The build process can run natively or from within a Docker container. This is optional but ensures the build environment is functional. To build the container images and instanciate it for the build:
 
 ```
 $ docker build -t lip-builder src/docker/lip-builder/
 $ docker run -it --rm -v `pwd`:`pwd` --privileged lip-builder sh -c "cd `pwd` && bash"
 ```
 
-Now we are ready to build the system images:
+The Makefile will fetch the required sources, compile the components and assemble the images:
 
 ```
 $ make
 ```
 
-Once the build completes, the images are available under *output/*. The [recovery image](doc/Recovery_and_Buildroot.md) *output/sdcard/recovery.img.tar* contains the Linux kernel and device tree blobs. It must be flashed with Odin (tested on the smartphone used as reference with version 3.12.3). In AP, select the *output/sdcard/recovery.img.tar* file then click *Start*.
+The images are created under *output/*.
 
-An archive of the root file system has been created under *output/sdcard/rootfs.tar.gz* with [debootstrap](https://wiki.debian.org/Debootstrap). It contains a base Debian system with a SSH server and minimal device specific configuration. The archive must be extracted at the root of an ext4 formatted SD card.
+## Flash the images
 
-Insert the SD card into the smartphone, reboot in recovery mode. The following login prompt should be visible:
+This requires erasing the recovery and system partitions of the device. When using the device listed in [supported hardware](doc/Supported_hardware.md), the easiest way to flash the system is by restarting in recovery mode hold power, home and volume down then run:
 
-![](doc/images/debian_buster_console_login.png)
+```
+$ make flash
+```
 
-Congratulations, this is Debian running on your smartphone!
+Alternatively, the content of *output/sdcard/rootfs.tar.gz* can be extracted to an ext4 partition of the internal flash or to a SD card.
+
+## Run the images
+
+To boot the device in recovery mode, hold power, home and volume up. The Linux kernel boots, the RAM disk is loaded and shows a boot menu. Use the volume keys for entry selection, home to confirm.
+
+* *Shell* drop to a shell immediately
+* *RAM disk (Busybox init)* hand over to Busybox system initialization provided in the RAM disk
+* *Internal eMMC partition (SYSTEM)* hand over to Debian by running Busybox switch_root to /sbin/inint on the system partition
+
+# Block diagram
+
+
 
 ## Configure
 
